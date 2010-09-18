@@ -1,0 +1,2180 @@
+  [1m[36mSQL (0.3ms)[0m  [1mSHOW TABLES[0m
+  [1m[35mSQL (102.1ms)[0m  CREATE TABLE `schema_migrations` (`version` varchar(255) NOT NULL) ENGINE=InnoDB
+  [1m[36mSQL (0.4ms)[0m  [1mSHOW KEYS FROM `schema_migrations`[0m
+  [1m[35mSQL (130.7ms)[0m  CREATE UNIQUE INDEX `unique_schema_migrations` ON `schema_migrations` (`version`)
+  [1m[36mSQL (0.4ms)[0m  [1mSHOW TABLES[0m
+  [1m[35mSQL (0.3ms)[0m  SHOW TABLES
+  [1m[36mSQL (0.7ms)[0m  [1mSELECT `schema_migrations`.`version` FROM `schema_migrations`[0m
+Migrating to CreateUsers (20100917033940)
+  [1m[35mSQL (89.9ms)[0m  CREATE TABLE `users` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `name` varchar(255), `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB
+  [1m[36mSQL (1.8ms)[0m  [1mdescribe `schema_migrations`[0m
+  [1m[35mSQL (3.8ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('20100917033940')
+Migrating to CreateUploads (20100917034100)
+  [1m[36mSQL (95.1ms)[0m  [1mCREATE TABLE `uploads` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `user_id` int(11), `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [1m[35mSQL (2.0ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('20100917034100')
+Migrating to AddAttachmentPhotoToUpload (20100917034202)
+  [1m[36mSQL (96.5ms)[0m  [1mALTER TABLE `uploads` ADD `photo_file_name` varchar(255)[0m
+  [1m[35mSQL (94.8ms)[0m  ALTER TABLE `uploads` ADD `photo_content_type` varchar(255)
+  [1m[36mSQL (91.1ms)[0m  [1mALTER TABLE `uploads` ADD `photo_file_size` int(11)[0m
+  [1m[35mSQL (90.6ms)[0m  ALTER TABLE `uploads` ADD `photo_updated_at` datetime
+  [1m[36mSQL (3.6ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('20100917034202')[0m
+  [1m[35mSQL (0.6ms)[0m  SHOW TABLES
+  [1m[36mSQL (3.1ms)[0m  [1mSELECT `schema_migrations`.`version` FROM `schema_migrations`[0m
+  [1m[35mSQL (0.3ms)[0m  SHOW TABLES
+  [1m[36mSQL (2.7ms)[0m  [1mdescribe `uploads`[0m
+  [1m[35mSQL (1.2ms)[0m  SHOW KEYS FROM `uploads`
+  [1m[36mSQL (2.6ms)[0m  [1mdescribe `users`[0m
+  [1m[35mSQL (2.0ms)[0m  SHOW KEYS FROM `users`
+
+
+Started GET "/" for 127.0.0.1 at 2010-09-16 23:52:09 -0400
+  Processing by UsersController#index as HTML
+  [1m[36mSQL (0.4ms)[0m  [1mSHOW TABLES[0m
+  [1m[35mUser Load (0.2ms)[0m  SELECT `users`.* FROM `users`
+Rendered users/index.html.erb within layouts/application (2.6ms)
+Completed 200 OK in 89ms (Views: 6.1ms | ActiveRecord: 0.6ms)
+
+
+Started GET "/users/new" for 127.0.0.1 at 2010-09-16 23:52:12 -0400
+  Processing by UsersController#new as HTML
+Rendered users/_form.html.erb (6.9ms)
+Rendered users/new.html.erb within layouts/application (10.5ms)
+Completed 200 OK in 60ms (Views: 51.5ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/users" for 127.0.0.1 at 2010-09-16 23:52:17 -0400
+  Processing by UsersController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"tU23yWzIPQiA99iD8kJDX4LWZdwGVkw3+K+vFcbTb/k=", "user"=>{"name"=>"Amit"}, "commit"=>"Create User"}
+  [1m[36mSQL (39.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (1.9ms)[0m  describe `users`
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO `users` (`created_at`, `name`, `updated_at`) VALUES ('2010-09-17 03:52:17', 'Amit', '2010-09-17 03:52:17')[0m
+  [1m[35mSQL (1.2ms)[0m  COMMIT
+Redirected to http://localhost:3000/users/1
+Completed 302 Found in 99ms
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-16 23:52:17 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (1.0ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.4ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered users/show.html.erb within layouts/application (16.1ms)
+Completed   in 53ms
+
+ActionView::Template::Error (undefined method `title' for #<#<Class:0x00000100e75f80>:0x00000100e708f0>):
+    1: <p id="notice"><%= notice %></p>
+    2: 
+    3: <% title h(@user.name) %>
+    4: <h3 id="photos_count"><%= pluralize(@user.uploads.size, "Photo")%></h3>
+    5: <div id="uploads"> <%= render :partial => @user.uploads %>
+    6: </div>
+  app/views/users/show.html.erb:3:in `_app_views_users_show_html_erb___911021918450377073_2155049100__403947729439743999'
+  app/controllers/users_controller.rb:18:in `show'
+
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_trace.erb (1.5ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (2.6ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/template_error.erb within rescues/layout (33.6ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-16 23:53:41 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (40.1ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.4ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered collection (0.0ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb___911021918450377073_2155293320__403947729439743999 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:10)
+Rendered users/show.html.erb within layouts/application (13.6ms)
+Completed 200 OK in 86ms (Views: 17.9ms | ActiveRecord: 40.6ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-16 23:53:56 -0400
+  Processing by UploadsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"tU23yWzIPQiA99iD8kJDX4LWZdwGVkw3+K+vFcbTb/k=", "upload"=>{"user_id"=>"1", "photo"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100916-1178-1twnz2w>}, "commit"=>"Upload"}
+  [1m[36mSQL (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (2.3ms)[0m  describe `uploads`
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-17 03:53:56', 'image/jpeg', 'DSC00034.JPG', 2850816, '2010-09-17 03:53:56', '2010-09-17 03:53:56', 1)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/1/original/DSC00034.JPG
+  [1m[35mSQL (1.4ms)[0m  COMMIT
+  [1m[36mUser Load (0.9ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+Redirected to http://localhost:3000/users/1
+Completed 302 Found in 209ms
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-16 23:53:56 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[35mUser Load (1.2ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1
+  [1m[36mUpload Load (0.5ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)[0m
+Rendered uploads/_upload.html.erb (0.9ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb___911021918450377073_2181411520__403947729439743999 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:10)
+Rendered users/show.html.erb within layouts/application (5.8ms)
+Completed 200 OK in 73ms (Views: 8.9ms | ActiveRecord: 1.7ms)
+
+
+Started GET "/users" for 127.0.0.1 at 2010-09-16 23:54:15 -0400
+  Processing by UsersController#index as HTML
+  [1m[35mUser Load (0.3ms)[0m  SELECT `users`.* FROM `users`
+Rendered users/index.html.erb within layouts/application (8.8ms)
+Completed 200 OK in 21ms (Views: 11.9ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-16 23:54:17 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (37.9ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.3ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered uploads/_upload.html.erb (0.9ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb___911021918450377073_2155415620__403947729439743999 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:10)
+Rendered users/show.html.erb within layouts/application (5.5ms)
+Completed 200 OK in 81ms (Views: 8.5ms | ActiveRecord: 38.2ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-16 23:55:47 -0400
+  Processing by UploadsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"tU23yWzIPQiA99iD8kJDX4LWZdwGVkw3+K+vFcbTb/k=", "upload"=>{"user_id"=>"1", "photo"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100916-1178-18cwuoq>}, "commit"=>"Upload"}
+  [1m[36mSQL (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-17 03:55:47', 'image/png', 'model_image.png', 109738, '2010-09-17 03:55:47', '2010-09-17 03:55:47', 1)
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/2/original/model_image.png
+  [1m[36mSQL (1.4ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (1.3ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1
+Redirected to http://localhost:3000/users/1
+Completed 302 Found in 106ms
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-16 23:55:47 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.9ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.4ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered uploads/_upload.html.erb (1.6ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb___911021918450377073_2182102280__403947729439743999 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:10)
+Rendered users/show.html.erb within layouts/application (6.6ms)
+Completed 200 OK in 74ms (Views: 9.8ms | ActiveRecord: 1.3ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-16 23:57:39 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.8ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.3ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered uploads/_upload.html.erb (1.9ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb___911021918450377073_2155265100__403947729439743999 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:10)
+Rendered users/show.html.erb within layouts/application (8.4ms)
+Completed 200 OK in 47ms (Views: 11.6ms | ActiveRecord: 1.2ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-16 23:58:57 -0400
+  Processing by UploadsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"tU23yWzIPQiA99iD8kJDX4LWZdwGVkw3+K+vFcbTb/k=", "upload"=>{"user_id"=>"1", "photo"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100916-1178-sl6hhj>}, "commit"=>"Upload"}
+  [1m[36mSQL (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.9ms)[0m  INSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-17 03:58:57', 'image/png', 'accept.png', 781, '2010-09-17 03:58:57', '2010-09-17 03:58:57', 1)
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/3/original/accept.png
+  [1m[36mSQL (2.0ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (1.1ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1
+Redirected to http://localhost:3000/users/1
+Completed 302 Found in 84ms
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-16 23:58:57 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.9ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.3ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered uploads/_upload.html.erb (2.4ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb___911021918450377073_2181527100__403947729439743999 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:10)
+Rendered users/show.html.erb within layouts/application (8.4ms)
+Completed 200 OK in 78ms (Views: 12.2ms | ActiveRecord: 1.2ms)
+
+
+Started GET "/users" for 127.0.0.1 at 2010-09-16 23:59:25 -0400
+  Processing by UsersController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT `users`.* FROM `users`[0m
+Rendered users/index.html.erb within layouts/application (8.3ms)
+Completed 200 OK in 20ms (Views: 11.5ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/users/1/edit" for 127.0.0.1 at 2010-09-16 23:59:27 -0400
+  Processing by UsersController#edit as HTML
+  Parameters: {"id"=>"1"}
+  [1m[35mUser Load (42.5ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1
+Rendered users/_form.html.erb (7.1ms)
+Rendered users/edit.html.erb within layouts/application (10.3ms)
+Completed 200 OK in 67ms (Views: 13.8ms | ActiveRecord: 42.5ms)
+
+
+Started GET "/users" for 127.0.0.1 at 2010-09-16 23:59:31 -0400
+  Processing by UsersController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT `users`.* FROM `users`[0m
+Rendered users/index.html.erb within layouts/application (9.0ms)
+Completed 200 OK in 21ms (Views: 12.1ms | ActiveRecord: 0.3ms)
+
+
+Started POST "/users/1" for 127.0.0.1 at 2010-09-17 00:00:04 -0400
+  Processing by UsersController#destroy as HTML
+  Parameters: {"authenticity_token"=>"tU23yWzIPQiA99iD8kJDX4LWZdwGVkw3+K+vFcbTb/k=", "id"=>"1"}
+  [1m[35mUser Load (41.5ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1
+  [1m[36mSQL (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  DELETE FROM `users` WHERE (`users`.`id` = 1)
+  [1m[36mSQL (1.1ms)[0m  [1mCOMMIT[0m
+Redirected to http://localhost:3000/users
+Completed 302 Found in 61ms
+
+
+Started GET "/users" for 127.0.0.1 at 2010-09-17 00:00:05 -0400
+  Processing by UsersController#index as HTML
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users`
+Rendered users/index.html.erb within layouts/application (2.4ms)
+Completed 200 OK in 14ms (Views: 5.6ms | ActiveRecord: 0.4ms)
+
+
+Started GET "/users/new" for 127.0.0.1 at 2010-09-17 00:08:36 -0400
+  Processing by UsersController#new as HTML
+Completed   in 30ms
+
+SyntaxError (/Users/amitgaur/Programming/RailsApps/uploadify/app/models/user.rb:2: syntax error, unexpected ',', expecting keyword_end
+  has_many :uploads, , :dependent => :destroy
+                      ^):
+  app/controllers/users_controller.rb:27:in `new'
+
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_trace.erb (0.8ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (2.3ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (5.7ms)
+
+
+Started GET "/users/new" for 127.0.0.1 at 2010-09-17 00:08:52 -0400
+  Processing by UsersController#new as HTML
+Rendered users/_form.html.erb (4.3ms)
+Rendered users/new.html.erb within layouts/application (6.9ms)
+Completed 200 OK in 52ms (Views: 44.0ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/users" for 127.0.0.1 at 2010-09-17 00:08:58 -0400
+  Processing by UsersController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"tU23yWzIPQiA99iD8kJDX4LWZdwGVkw3+K+vFcbTb/k=", "user"=>{"name"=>"amit"}, "commit"=>"Create User"}
+  [1m[36mSQL (33.3ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (1.0ms)[0m  INSERT INTO `users` (`created_at`, `name`, `updated_at`) VALUES ('2010-09-17 04:08:58', 'amit', '2010-09-17 04:08:58')
+  [1m[36mSQL (1.4ms)[0m  [1mCOMMIT[0m
+Redirected to http://localhost:3000/users/2
+Completed 302 Found in 101ms
+
+
+Started GET "/users/2" for 127.0.0.1 at 2010-09-17 00:08:58 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[35mUser Load (1.2ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 2) LIMIT 1
+  [1m[36mUpload Load (0.4ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 2)[0m
+Rendered collection (0.0ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb___911021918450377073_2155097760__403947729439743999 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:10)
+Rendered users/show.html.erb within layouts/application (12.1ms)
+Completed 200 OK in 42ms (Views: 15.2ms | ActiveRecord: 1.5ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 00:09:08 -0400
+  Processing by UploadsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"tU23yWzIPQiA99iD8kJDX4LWZdwGVkw3+K+vFcbTb/k=", "upload"=>{"user_id"=>"2", "photo"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-1178-1b39r9t>}, "commit"=>"Upload"}
+  [1m[35mSQL (0.2ms)[0m  BEGIN
+  [1m[36mSQL (0.6ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-17 04:09:09', 'image/png', 'accept.png', 781, '2010-09-17 04:09:09', '2010-09-17 04:09:09', 2)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/4/original/accept.png
+  [1m[35mSQL (1.4ms)[0m  COMMIT
+  [1m[36mUser Load (1.4ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 2) LIMIT 1[0m
+Redirected to http://localhost:3000/users/2
+Completed 302 Found in 49ms
+
+
+Started GET "/users/2" for 127.0.0.1 at 2010-09-17 00:09:09 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 2) LIMIT 1
+  [1m[36mUpload Load (0.3ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 2)[0m
+Rendered uploads/_upload.html.erb (0.9ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb___911021918450377073_2181370700__403947729439743999 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:10)
+Rendered users/show.html.erb within layouts/application (5.4ms)
+Completed 200 OK in 68ms (Views: 8.2ms | ActiveRecord: 0.7ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 00:09:22 -0400
+  Processing by UploadsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"tU23yWzIPQiA99iD8kJDX4LWZdwGVkw3+K+vFcbTb/k=", "upload"=>{"user_id"=>"2", "photo"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-1178-1ie9ioj>}, "commit"=>"Upload"}
+  [1m[35mSQL (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.6ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-17 04:09:22', 'image/png', 'application_edit.png', 703, '2010-09-17 04:09:22', '2010-09-17 04:09:22', 2)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/5/original/application_edit.png
+  [1m[35mSQL (1.4ms)[0m  COMMIT
+  [1m[36mUser Load (1.4ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 2) LIMIT 1[0m
+Redirected to http://localhost:3000/users/2
+Completed 302 Found in 71ms
+
+
+Started GET "/users/2" for 127.0.0.1 at 2010-09-17 00:09:22 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[35mUser Load (1.2ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 2) LIMIT 1
+  [1m[36mUpload Load (0.5ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 2)[0m
+Rendered uploads/_upload.html.erb (1.6ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb___911021918450377073_2153646980__403947729439743999 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:10)
+Rendered users/show.html.erb within layouts/application (6.3ms)
+Completed 200 OK in 44ms (Views: 9.2ms | ActiveRecord: 1.7ms)
+
+
+Started GET "/users" for 127.0.0.1 at 2010-09-17 00:09:25 -0400
+  Processing by UsersController#index as HTML
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users`
+Rendered users/index.html.erb within layouts/application (7.6ms)
+Completed 200 OK in 18ms (Views: 10.4ms | ActiveRecord: 0.4ms)
+
+
+Started POST "/users/2" for 127.0.0.1 at 2010-09-17 00:10:00 -0400
+  Processing by UsersController#destroy as HTML
+  Parameters: {"authenticity_token"=>"tU23yWzIPQiA99iD8kJDX4LWZdwGVkw3+K+vFcbTb/k=", "id"=>"2"}
+  [1m[36mUser Load (37.4ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 2) LIMIT 1[0m
+  [1m[35mSQL (0.3ms)[0m  BEGIN
+  [1m[36mUpload Load (0.5ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 2)[0m
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/4/original/accept.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[35mSQL (1.5ms)[0m  DELETE FROM `uploads` WHERE (`uploads`.`id` = 4)
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/5/original/application_edit.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[36mSQL (0.3ms)[0m  [1mDELETE FROM `uploads` WHERE (`uploads`.`id` = 5)[0m
+  [1m[35mSQL (0.2ms)[0m  DELETE FROM `users` WHERE (`users`.`id` = 2)
+  [1m[36mSQL (1.3ms)[0m  [1mCOMMIT[0m
+Redirected to http://localhost:3000/users
+Completed 302 Found in 112ms
+
+
+Started GET "/users" for 127.0.0.1 at 2010-09-17 00:10:00 -0400
+  Processing by UsersController#index as HTML
+  [1m[35mUser Load (0.5ms)[0m  SELECT `users`.* FROM `users`
+Rendered users/index.html.erb within layouts/application (1.9ms)
+Completed 200 OK in 12ms (Views: 4.6ms | ActiveRecord: 0.5ms)
+
+
+Started GET "/" for 127.0.0.1 at 2010-09-17 20:31:20 -0400
+  Processing by UsersController#index as HTML
+  [1m[36mSQL (1.9ms)[0m  [1mSHOW TABLES[0m
+  [1m[35mUser Load (9.2ms)[0m  SELECT `users`.* FROM `users`
+Rendered users/index.html.erb within layouts/application (2.0ms)
+Completed 200 OK in 182ms (Views: 7.9ms | ActiveRecord: 11.1ms)
+
+
+Started GET "/users/new" for 127.0.0.1 at 2010-09-17 20:31:24 -0400
+  Processing by UsersController#new as HTML
+Rendered users/_form.html.erb (44.1ms)
+Rendered users/new.html.erb within layouts/application (47.8ms)
+Completed 200 OK in 84ms (Views: 51.4ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/users" for 127.0.0.1 at 2010-09-17 20:31:30 -0400
+  Processing by UsersController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "user"=>{"name"=>"Amit"}, "commit"=>"Create User"}
+  [1m[36mSQL (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (1.7ms)[0m  describe `users`
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `users` (`created_at`, `name`, `updated_at`) VALUES ('2010-09-18 00:31:30', 'Amit', '2010-09-18 00:31:30')[0m
+  [1m[35mSQL (1.4ms)[0m  COMMIT
+Redirected to http://localhost:3000/users/1
+Completed 302 Found in 34ms
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 20:31:30 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (13.3ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered collection (0.0ms)
+Rendered users/_show.html.erb (16.3ms)
+Rendered users/show.html.erb within layouts/application (18.7ms)
+Completed   in 110ms
+
+ActionView::Template::Error (undefined local variable or method `session_key' for #<#<Class:0x000001017251d0>:0x000001017201a8>):
+    13:   	scriptData : {
+    14: 	        '_http_accept': 'application/javascript',
+    15: 	        '_method': 'post',
+    16: 	        '<%= session_key %>' : encodeURIComponent('<%= u cookies[session_key] %>'),
+    17: 	        'authenticity_token': encodeURIComponent('<%= u form_authenticity_token %>')
+    18: 	      }
+    19: 	});
+  app/views/users/_show.html.erb:16:in `_app_views_users__show_html_erb__808329465589232443_2159537240_1633466038109373948'
+  app/views/users/show.html.erb:10:in `_app_views_users_show_html_erb___560390819505348165_2159601180__995843790015157035'
+  app/controllers/users_controller.rb:18:in `show'
+
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_trace.erb (0.9ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (2.3ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/template_error.erb within rescues/layout (7.4ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 20:32:03 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (42.1ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.5ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered collection (0.0ms)
+Rendered users/_show.html.erb (0.5ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb___560390819505348165_2159828640__995843790015157035 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:11)
+Rendered users/show.html.erb within layouts/application (11.9ms)
+Completed 200 OK in 111ms (Views: 14.7ms | ActiveRecord: 42.6ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 20:33:30 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (35.9ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.5ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered collection (0.0ms)
+Rendered users/_show.html.erb (0.5ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb___560390819505348165_2153498100__995843790015157035 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:11)
+Rendered users/show.html.erb within layouts/application (37.9ms)
+Completed 200 OK in 106ms (Views: 40.8ms | ActiveRecord: 36.4ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 20:33:33 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (38.0ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.5ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered collection (0.0ms)
+Rendered users/_show.html.erb (0.5ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb___560390819505348165_2158443460__995843790015157035 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:11)
+Rendered users/show.html.erb within layouts/application (12.6ms)
+Completed 200 OK in 83ms (Views: 15.4ms | ActiveRecord: 38.5ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 20:34:41 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (41.3ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.5ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered collection (0.0ms)
+Rendered users/_show.html.erb (0.8ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb___560390819505348165_2159179100__995843790015157035 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:11)
+Rendered users/show.html.erb within layouts/application (12.3ms)
+Completed 200 OK in 87ms (Views: 15.1ms | ActiveRecord: 41.8ms)
+
+
+Started POST "/uploads/create" for 127.0.0.1 at 2010-09-17 20:34:54 -0400
+
+ActionController::RoutingError (No route matches "/uploads/create"):
+  
+
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/routing_error.erb within rescues/layout (0.7ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 20:39:48 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mSQL (0.5ms)[0m  [1mSHOW TABLES[0m
+  [1m[35mUser Load (36.3ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1
+  [1m[36mUpload Load (0.5ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)[0m
+Rendered collection (0.0ms)
+Rendered users/_show.html.erb (0.9ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb___1454854043048879736_2153333040_4016927009963197551 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:11)
+Rendered users/show.html.erb within layouts/application (35.6ms)
+Completed 200 OK in 183ms (Views: 38.6ms | ActiveRecord: 37.4ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 20:39:57 -0400
+  Processing by UploadsController#create as HTML
+  Parameters: {"Filename"=>"Sample1.mxml", "_http_accept"=>"application/javascript", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "folder"=>"/users/", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-556-18yqm6u>, "Upload"=>"Submit Query"}
+Completed   in 0ms
+
+ActionController::InvalidAuthenticityToken (ActionController::InvalidAuthenticityToken):
+  
+
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_trace.erb (0.9ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (3.7ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (29.8ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 20:41:00 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[35mUser Load (216.9ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1
+  [1m[36mUpload Load (0.4ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)[0m
+Rendered collection (0.0ms)
+Rendered users/_show.html.erb (1.3ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb___1454854043048879736_2154174420_4016927009963197551 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:11)
+Rendered users/show.html.erb within layouts/application (12.6ms)
+Completed 200 OK in 304ms (Views: 15.4ms | ActiveRecord: 217.2ms)
+
+
+Started GET "/users/" for 127.0.0.1 at 2010-09-17 20:41:04 -0400
+  Processing by UsersController#index as HTML
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users`
+Rendered users/index.html.erb within layouts/application (7.5ms)
+Completed 200 OK in 19ms (Views: 10.6ms | ActiveRecord: 0.4ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 20:41:06 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (107.5ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.5ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered collection (0.0ms)
+Rendered users/_show.html.erb (0.9ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb___1454854043048879736_2153414540_4016927009963197551 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:11)
+Rendered users/show.html.erb within layouts/application (40.7ms)
+Completed 200 OK in 185ms (Views: 43.6ms | ActiveRecord: 108.0ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 20:41:29 -0400
+  Processing by UploadsController#create as HTML
+  Parameters: {"Filename"=>"collaborators.png", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "_http_accept"=>"application/javascript", "folder"=>"/users/", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-556-1wy7fhj>, "Upload"=>"Submit Query"}
+Completed   in 0ms
+
+ActionController::InvalidAuthenticityToken (ActionController::InvalidAuthenticityToken):
+  
+
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_trace.erb (0.8ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (3.5ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (6.9ms)
+
+
+Started GET "/users" for 127.0.0.1 at 2010-09-17 20:44:43 -0400
+  Processing by UsersController#index as HTML
+  [1m[36mSQL (0.5ms)[0m  [1mSHOW TABLES[0m
+  [1m[35mUser Load (0.3ms)[0m  SELECT `users`.* FROM `users`
+Rendered users/index.html.erb within layouts/application (8.8ms)
+Completed 200 OK in 88ms (Views: 11.7ms | ActiveRecord: 0.8ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 20:44:45 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (1.2ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.4ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered collection (0.0ms)
+Rendered users/_show.html.erb (0.8ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb__2673461335061786954_2177731980_2443497774044092852 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:11)
+Rendered users/show.html.erb within layouts/application (12.1ms)
+Completed 200 OK in 112ms (Views: 14.8ms | ActiveRecord: 1.6ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 20:44:53 -0400
+  Processing by UploadsController#create as JS
+  Parameters: {"Filename"=>"collaborators.png", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "_http_accept"=>"application/javascript", "folder"=>"/users/", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-573-ag4fcb>, "Upload"=>"Submit Query"}
+  [1m[36mSQL (40.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (1.8ms)[0m  describe `uploads`
+  [1m[36mSQL (1.3ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 00:44:53', NULL, NULL, NULL, NULL, '2010-09-18 00:44:53', NULL)[0m
+[paperclip] Saving attachments.
+  [1m[35mSQL (203.1ms)[0m  COMMIT
+Completed 406 Not Acceptable in 270ms
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 20:54:34 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (42.6ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.5ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered collection (0.0ms)
+Rendered users/_show.html.erb (1.6ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb__2673461335061786954_2162205960_2443497774044092852 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:11)
+Rendered users/show.html.erb within layouts/application (56.0ms)
+Completed 200 OK in 133ms (Views: 59.4ms | ActiveRecord: 43.1ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 20:54:42 -0400
+  Processing by UploadsController#create as JS
+  Parameters: {"Filename"=>"collaborators.png", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "_http_accept"=>"application/javascript", "user_id"=>"1", "folder"=>"/users/", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-573-17p5gyu>, "Upload"=>"Submit Query"}
+Completed   in 0ms
+
+NoMethodError (You have a nil object when you didn't expect it!
+You might have expected an instance of ActiveRecord::Base.
+The error occurred while evaluating nil.[]):
+  app/controllers/uploads_controller.rb:93:in `coerce'
+  app/controllers/uploads_controller.rb:43:in `create'
+  app/middleware/flash_session_cookie_middleware.rb:17:in `call'
+
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_trace.erb (0.8ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (4.7ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (8.1ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 21:01:06 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (33.2ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.3ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered collection (0.0ms)
+Rendered users/_show.html.erb (1.1ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb__2673461335061786954_2178013600_2443497774044092852 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:11)
+Rendered users/show.html.erb within layouts/application (12.8ms)
+Completed 200 OK in 74ms (Views: 15.7ms | ActiveRecord: 33.6ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 21:01:13 -0400
+  Processing by UploadsController#create as JS
+  Parameters: {"Filename"=>"collaborators.png", "folder"=>"/users/", "_http_accept"=>"application/javascript", "user_id"=>"1", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-573-z47iqw>, "Upload"=>"Submit Query"}
+Completed   in 1ms
+
+NoMethodError (You have a nil object when you didn't expect it!
+You might have expected an instance of ActiveRecord::Base.
+The error occurred while evaluating nil.[]):
+  app/controllers/uploads_controller.rb:93:in `coerce'
+  app/controllers/uploads_controller.rb:43:in `create'
+  app/middleware/flash_session_cookie_middleware.rb:17:in `call'
+
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_trace.erb (1.0ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (4.5ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (33.5ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 21:07:56 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (41.6ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.5ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered collection (0.0ms)
+Rendered users/_show.html.erb (1.0ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb__2673461335061786954_2176989480_2443497774044092852 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:11)
+Rendered users/show.html.erb within layouts/application (13.4ms)
+Completed 200 OK in 84ms (Views: 16.2ms | ActiveRecord: 42.1ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 21:08:07 -0400
+  Processing by UploadsController#create as JS
+  Parameters: {"Filename"=>"collaborators.png", "folder"=>"/users/", "_http_accept"=>"application/javascript", "user_id"=>"1", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-573-1fhp8te>, "Upload"=>"Submit Query"}
+Completed   in 0ms
+
+NoMethodError (You have a nil object when you didn't expect it!
+You might have expected an instance of ActiveRecord::Base.
+The error occurred while evaluating nil.[]):
+  app/controllers/uploads_controller.rb:93:in `coerce'
+  app/controllers/uploads_controller.rb:43:in `create'
+  app/middleware/flash_session_cookie_middleware.rb:17:in `call'
+
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_trace.erb (0.8ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (4.5ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (8.1ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 21:14:47 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (39.1ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.5ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered collection (0.0ms)
+Rendered users/_show.html.erb (0.9ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb__2673461335061786954_2160620020_2443497774044092852 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:11)
+Rendered users/show.html.erb within layouts/application (39.9ms)
+Completed 200 OK in 108ms (Views: 43.1ms | ActiveRecord: 39.6ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 21:14:55 -0400
+  Processing by UploadsController#create as JS
+  Parameters: {"Filename"=>"collaborators.png", "folder"=>"/users/", "_http_accept"=>"application/javascript", "user_id"=>"1", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-573-1whlaut>, "Upload"=>"Submit Query"}
+Completed   in 0ms
+
+NoMethodError (You have a nil object when you didn't expect it!
+You might have expected an instance of ActiveRecord::Base.
+The error occurred while evaluating nil.[]):
+  app/controllers/uploads_controller.rb:93:in `coerce'
+  app/controllers/uploads_controller.rb:43:in `create'
+  app/middleware/flash_session_cookie_middleware.rb:17:in `call'
+
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_trace.erb (0.8ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (4.5ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (7.9ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 21:17:17 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (39.7ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.4ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered collection (0.0ms)
+Rendered users/_show.html.erb (0.9ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb__2673461335061786954_2178084180_2443497774044092852 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:11)
+Rendered users/show.html.erb within layouts/application (13.6ms)
+Completed 200 OK in 107ms (Views: 16.5ms | ActiveRecord: 40.1ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 21:17:25 -0400
+  Processing by UploadsController#create as JS
+  Parameters: {"Filename"=>"collaborators.png", "folder"=>"/users/", "_http_accept"=>"application/javascript", "user_id"=>"1", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-573-v8vxto>, "Upload"=>"Submit Query"}
+Completed   in 0ms
+
+NoMethodError (You have a nil object when you didn't expect it!
+You might have expected an instance of ActiveRecord::Base.
+The error occurred while evaluating nil.[]):
+  app/controllers/uploads_controller.rb:93:in `coerce'
+  app/controllers/uploads_controller.rb:43:in `create'
+  app/middleware/flash_session_cookie_middleware.rb:17:in `call'
+
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_trace.erb (0.9ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (29.7ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (33.4ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 21:22:09 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (40.3ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.3ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered collection (0.0ms)
+Rendered users/_show.html.erb (0.9ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb__2673461335061786954_2177108380_2443497774044092852 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:11)
+Rendered users/show.html.erb within layouts/application (12.8ms)
+Completed 200 OK in 81ms (Views: 15.8ms | ActiveRecord: 40.7ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 21:22:16 -0400
+  Processing by UploadsController#create as JS
+  Parameters: {"Filename"=>"collaborators.png", "folder"=>"/users/", "_http_accept"=>"application/javascript", "user_id"=>"1", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-573-11zdtcw>, "Upload"=>"Submit Query"}
+Completed   in 0ms
+
+NoMethodError (You have a nil object when you didn't expect it!
+You might have expected an instance of ActiveRecord::Base.
+The error occurred while evaluating nil.[]):
+  app/controllers/uploads_controller.rb:93:in `coerce'
+  app/controllers/uploads_controller.rb:43:in `create'
+  app/middleware/flash_session_cookie_middleware.rb:17:in `call'
+
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_trace.erb (0.8ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (4.7ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (8.2ms)
+
+
+Started GET "/users" for 127.0.0.1 at 2010-09-17 21:22:47 -0400
+  Processing by UsersController#index as HTML
+  [1m[36mSQL (0.5ms)[0m  [1mSHOW TABLES[0m
+  [1m[35mUser Load (0.3ms)[0m  SELECT `users`.* FROM `users`
+Rendered users/index.html.erb within layouts/application (9.1ms)
+Completed 200 OK in 88ms (Views: 12.0ms | ActiveRecord: 0.8ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 21:22:52 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (38.2ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.4ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered collection (0.0ms)
+Rendered users/_show.html.erb (0.9ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb__4046202971549861306_2168515180_2025097446887625802 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:11)
+Rendered users/show.html.erb within layouts/application (13.2ms)
+Completed 200 OK in 92ms (Views: 16.1ms | ActiveRecord: 38.6ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 21:22:59 -0400
+  Processing by UploadsController#create as JS
+  Parameters: {"Filename"=>"collaborators.png", "folder"=>"/users/", "_http_accept"=>"application/javascript", "user_id"=>"1", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-778-1ebpk37>, "Upload"=>"Submit Query"}
+Completed   in 0ms
+
+NoMethodError (You have a nil object when you didn't expect it!
+You might have expected an instance of ActiveRecord::Base.
+The error occurred while evaluating nil.[]):
+  app/controllers/uploads_controller.rb:93:in `coerce'
+  app/controllers/uploads_controller.rb:43:in `create'
+  app/middleware/flash_session_cookie_middleware.rb:17:in `call'
+
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_trace.erb (0.8ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (4.9ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (8.4ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 21:26:57 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (40.6ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.3ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered collection (0.0ms)
+Rendered users/_show.html.erb (27.3ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb__4046202971549861306_2152865100_2025097446887625802 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:11)
+Rendered users/show.html.erb within layouts/application (40.4ms)
+Completed 200 OK in 111ms (Views: 43.3ms | ActiveRecord: 40.9ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 21:27:04 -0400
+  Processing by UploadsController#create as JS
+  Parameters: {"Filename"=>"collaborators.png", "folder"=>"/users/", "_http_accept"=>"application/javascript", "user_id"=>"1", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-778-13mcr3a>, "Upload"=>"Submit Query"}
+Completed   in 4ms
+
+NameError (uninitialized constant UploadsController::MIME):
+  app/controllers/uploads_controller.rb:93:in `coerce'
+  app/controllers/uploads_controller.rb:43:in `create'
+  app/middleware/flash_session_cookie_middleware.rb:17:in `call'
+
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_trace.erb (0.9ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (5.2ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (9.0ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 21:41:55 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (35.3ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.4ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered collection (0.0ms)
+Rendered users/_show.html.erb (0.9ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb__4046202971549861306_2176907900_2025097446887625802 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:11)
+Rendered users/show.html.erb within layouts/application (12.7ms)
+Completed 200 OK in 78ms (Views: 15.6ms | ActiveRecord: 35.7ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 21:42:02 -0400
+  Processing by UploadsController#create as JS
+  Parameters: {"Filename"=>"collaborators.png", "folder"=>"/users/", "_http_accept"=>"application/javascript", "user_id"=>"1", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-778-1cxc2ip>, "Upload"=>"Submit Query"}
+Completed   in 0ms
+
+NoMethodError (undefined method `type_for' for Mime::Type:Class):
+  app/controllers/uploads_controller.rb:93:in `coerce'
+  app/controllers/uploads_controller.rb:43:in `create'
+  app/middleware/flash_session_cookie_middleware.rb:17:in `call'
+
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_trace.erb (0.8ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (5.0ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (8.6ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 21:43:30 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (35.5ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.4ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered collection (0.0ms)
+Rendered users/_show.html.erb (0.9ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb__4046202971549861306_2162864980_2025097446887625802 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:11)
+Rendered users/show.html.erb within layouts/application (13.6ms)
+Completed 200 OK in 79ms (Views: 16.5ms | ActiveRecord: 35.9ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 21:43:36 -0400
+  Processing by UploadsController#create as JS
+  Parameters: {"Filename"=>"collaborators.png", "folder"=>"/users/", "_http_accept"=>"application/javascript", "user_id"=>"1", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-778-sa4s24>, "Upload"=>"Submit Query"}
+  [1m[36mSQL (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (1.6ms)[0m  describe `uploads`
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 01:43:36', 'collaborators.png', 'collaborators.png', 716, '2010-09-18 01:43:36', '2010-09-18 01:43:36', 1)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/2/original/collaborators.png
+  [1m[35mSQL (1.1ms)[0m  COMMIT
+Completed 406 Not Acceptable in 69ms
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 21:45:02 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (38.3ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.4ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered uploads/_upload.html.erb (0.9ms)
+Rendered users/_show.html.erb (0.8ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb__4046202971549861306_2177354900_2025097446887625802 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:11)
+Rendered users/show.html.erb within layouts/application (25.6ms)
+Completed 200 OK in 129ms (Views: 28.9ms | ActiveRecord: 38.7ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 21:45:09 -0400
+  Processing by UploadsController#create as JS
+  Parameters: {"Filename"=>"collaborators.png", "folder"=>"/users/", "_http_accept"=>"application/javascript", "user_id"=>"1", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-778-p2l7yr>, "Upload"=>"Submit Query"}
+  [1m[36mSQL (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.8ms)[0m  INSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 01:45:10', 'collaborators.png', 'collaborators.png', 716, '2010-09-18 01:45:10', '2010-09-18 01:45:10', 1)
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/3/original/collaborators.png
+  [1m[36mSQL (1.3ms)[0m  [1mCOMMIT[0m
+Completed 406 Not Acceptable in 58ms
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 21:46:34 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[35mUser Load (35.9ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1
+  [1m[36mUpload Load (0.5ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)[0m
+Rendered uploads/_upload.html.erb (1.8ms)
+Rendered users/_show.html.erb (0.8ms)
+DEPRECATION WARNING: <% %> style block helpers are deprecated. Please use <%= %>. (called from _app_views_users_show_html_erb__4046202971549861306_2163828580_2025097446887625802 at /Users/amitgaur/Programming/RailsApps/uploadify/app/views/users/show.html.erb:11)
+Rendered users/show.html.erb within layouts/application (7.8ms)
+Completed 200 OK in 81ms (Views: 10.8ms | ActiveRecord: 36.4ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 21:47:25 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[35mUser Load (40.0ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1
+  [1m[36mUpload Load (0.5ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)[0m
+Rendered uploads/_upload.html.erb (1.6ms)
+Rendered users/_show.html.erb (0.8ms)
+Rendered users/show.html.erb within layouts/application (7.4ms)
+Completed 200 OK in 85ms (Views: 10.7ms | ActiveRecord: 40.5ms)
+
+
+Started GET "/users/" for 127.0.0.1 at 2010-09-17 21:56:52 -0400
+  Processing by UsersController#index as HTML
+  [1m[36mSQL (0.5ms)[0m  [1mSHOW TABLES[0m
+  [1m[35mUser Load (0.2ms)[0m  SELECT `users`.* FROM `users`
+Rendered users/index.html.erb within layouts/application (9.9ms)
+Completed 200 OK in 129ms (Views: 14.1ms | ActiveRecord: 0.7ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 21:56:56 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (40.4ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.4ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered uploads/_upload.html.erb (1.4ms)
+Rendered users/_show.html.erb (0.9ms)
+Rendered users/show.html.erb within layouts/application (8.7ms)
+Completed 200 OK in 96ms (Views: 12.0ms | ActiveRecord: 40.8ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 21:57:03 -0400
+  Processing by UploadsController#create as JS
+  Parameters: {"Filename"=>"collaborators.png", "folder"=>"/users/", "_http_accept"=>"application/javascript", "user_id"=>"1", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-908-1u7lgtw>, "Upload"=>"Submit Query"}
+  [1m[36mSQL (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (1.3ms)[0m  describe `uploads`
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 01:57:03', '[image/png]', 'collaborators.png', 716, '2010-09-18 01:57:03', '2010-09-18 01:57:03', 1)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/4/original/collaborators.png
+  [1m[35mSQL (1.2ms)[0m  COMMIT
+Completed 406 Not Acceptable in 70ms
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 22:01:38 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (36.7ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.4ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered uploads/_upload.html.erb (2.2ms)
+Rendered users/_show.html.erb (0.8ms)
+Rendered users/show.html.erb within layouts/application (7.9ms)
+Completed 200 OK in 80ms (Views: 11.1ms | ActiveRecord: 37.0ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 22:01:50 -0400
+  Processing by UploadsController#create as JS
+  Parameters: {"Filename"=>"collaborators.png", "folder"=>"/users/", "_http_accept"=>"application/javascript", "user_id"=>"1", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-908-40fiwr>, "Upload"=>"Submit Query"}
+  [1m[36mSQL (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 02:01:50', '[image/png]', 'collaborators.png', 716, '2010-09-18 02:01:50', '2010-09-18 02:01:50', 1)
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/5/original/collaborators.png
+  [1m[36mSQL (1.3ms)[0m  [1mCOMMIT[0m
+Completed 406 Not Acceptable in 64ms
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 22:03:07 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[35mUser Load (1.0ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1
+  [1m[36mUpload Load (0.5ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)[0m
+Rendered uploads/_upload.html.erb (2.5ms)
+Rendered users/_show.html.erb (1.0ms)
+Rendered users/show.html.erb within layouts/application (8.9ms)
+Completed 200 OK in 48ms (Views: 11.9ms | ActiveRecord: 1.5ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 22:03:15 -0400
+  Processing by UploadsController#create as JS
+  Parameters: {"Filename"=>"collaborators.png", "folder"=>"/users/", "_http_accept"=>"application/javascript", "user_id"=>"1", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-908-gvf00r>, "Upload"=>"Submit Query"}
+  [1m[35mSQL (0.3ms)[0m  BEGIN
+  [1m[36mSQL (0.7ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 02:03:15', '[image/png]', 'collaborators.png', 716, '2010-09-18 02:03:15', '2010-09-18 02:03:15', 1)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/6/original/collaborators.png
+  [1m[35mSQL (1.5ms)[0m  COMMIT
+Completed 406 Not Acceptable in 92ms
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 22:06:10 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (39.7ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.3ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered uploads/_upload.html.erb (3.5ms)
+Rendered users/_show.html.erb (1.3ms)
+Rendered users/show.html.erb within layouts/application (11.2ms)
+Completed 200 OK in 88ms (Views: 14.4ms | ActiveRecord: 40.0ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 22:06:18 -0400
+  Processing by UploadsController#create as JS
+  Parameters: {"Filename"=>"collaborators.png", "folder"=>"/users/", "_http_accept"=>"text/javascript", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "user_id"=>"1", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-908-7sc72x>, "Upload"=>"Submit Query"}
+  [1m[36mSQL (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 02:06:18', '[image/png]', 'collaborators.png', 716, '2010-09-18 02:06:18', '2010-09-18 02:06:18', 1)
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/7/original/collaborators.png
+  [1m[36mSQL (1.1ms)[0m  [1mCOMMIT[0m
+Completed 406 Not Acceptable in 61ms
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 22:09:24 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[35mUser Load (38.5ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1
+  [1m[36mUpload Load (0.5ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)[0m
+Rendered uploads/_upload.html.erb (3.5ms)
+Rendered users/_show.html.erb (0.8ms)
+Rendered users/show.html.erb within layouts/application (9.5ms)
+Completed 200 OK in 84ms (Views: 12.5ms | ActiveRecord: 39.0ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 22:09:41 -0400
+
+SyntaxError (/Users/amitgaur/Programming/RailsApps/uploadify/app/controllers/uploads_controller.rb:99: syntax error, unexpected keyword_end, expecting $end):
+  app/middleware/flash_session_cookie_middleware.rb:17:in `call'
+
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_trace.erb (0.9ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (1.7ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (5.5ms)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 22:10:10 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[35mUser Load (38.1ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1
+  [1m[36mUpload Load (0.5ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)[0m
+Rendered uploads/_upload.html.erb (3.6ms)
+Rendered users/_show.html.erb (0.9ms)
+Rendered users/show.html.erb within layouts/application (10.9ms)
+Completed 200 OK in 86ms (Views: 13.9ms | ActiveRecord: 38.6ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 22:10:17 -0400
+  Processing by UploadsController#create as JS
+  Parameters: {"Filename"=>"anchor.png", "_http_accept"=>"text/javascript", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "folder"=>"/users/", "user_id"=>"1", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-908-1l5tlv>, "Upload"=>"Submit Query"}
+  [1m[35mSQL (0.2ms)[0m  BEGIN
+  [1m[36mSQL (0.8ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 02:10:17', '[image/png]', 'anchor.png', 523, '2010-09-18 02:10:17', '2010-09-18 02:10:17', 1)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/8/original/anchor.png
+  [1m[35mSQL (1.3ms)[0m  COMMIT
+Completed 406 Not Acceptable in 60ms
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 22:25:09 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (37.8ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1[0m
+  [1m[35mUpload Load (0.5ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+Rendered uploads/_upload.html.erb (3.8ms)
+Rendered users/_show.html.erb (0.8ms)
+Rendered users/show.html.erb within layouts/application (10.1ms)
+Completed 200 OK in 119ms (Views: 13.1ms | ActiveRecord: 38.3ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 22:25:16 -0400
+  Processing by UploadsController#create as JS
+  Parameters: {"Filename"=>"application_add.png", "folder"=>"/users/", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "user_id"=>"1", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "_http_accept"=>"text/javascript", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-908-1ni5ihr>, "Upload"=>"Submit Query"}
+  [1m[36mSQL (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 02:25:16', '[image/png]', 'application_add.png', 619, '2010-09-18 02:25:16', '2010-09-18 02:25:16', 1)
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/9/original/application_add.png
+  [1m[36mSQL (1.3ms)[0m  [1mCOMMIT[0m
+Completed 406 Not Acceptable in 60ms
+
+
+Started GET "/users/1" for 127.0.0.1 at 2010-09-17 22:27:01 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[35mUser Load (34.0ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1
+  [1m[36mUpload Load (0.3ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)[0m
+Rendered uploads/_upload.html.erb (4.6ms)
+Rendered users/_show.html.erb (0.8ms)
+Rendered users/show.html.erb within layouts/application (10.5ms)
+Completed 200 OK in 112ms (Views: 13.5ms | ActiveRecord: 34.3ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 22:27:12 -0400
+  Processing by UploadsController#create as JS
+  Parameters: {"Filename"=>"text_smallcaps.png", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "_http_accept"=>"application/javascript", "user_id"=>"1", "folder"=>"/users/", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-908-1cm9l3j>, "Upload"=>"Submit Query"}
+  [1m[35mSQL (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.9ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 02:27:12', '[image/png]', 'text_smallcaps.png', 260, '2010-09-18 02:27:12', '2010-09-18 02:27:12', 1)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/10/original/text_smallcaps.png
+  [1m[35mSQL (1.3ms)[0m  COMMIT
+Completed 406 Not Acceptable in 63ms
+
+
+Started GET "/users" for 127.0.0.1 at 2010-09-17 22:27:49 -0400
+  Processing by UsersController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT `users`.* FROM `users`[0m
+Rendered users/index.html.erb within layouts/application (9.0ms)
+Completed 200 OK in 21ms (Views: 12.2ms | ActiveRecord: 0.5ms)
+
+
+Started POST "/users/1" for 127.0.0.1 at 2010-09-17 22:27:54 -0400
+  Processing by UsersController#destroy as HTML
+  Parameters: {"authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "id"=>"1"}
+  [1m[35mUser Load (40.7ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 1) LIMIT 1
+  [1m[36mSQL (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mUpload Load (0.6ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 1)
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/2/original/collaborators.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[36mSQL (1.4ms)[0m  [1mDELETE FROM `uploads` WHERE (`uploads`.`id` = 2)[0m
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/3/original/collaborators.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[35mSQL (0.4ms)[0m  DELETE FROM `uploads` WHERE (`uploads`.`id` = 3)
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/4/original/collaborators.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[36mSQL (0.4ms)[0m  [1mDELETE FROM `uploads` WHERE (`uploads`.`id` = 4)[0m
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/5/original/collaborators.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[35mSQL (0.3ms)[0m  DELETE FROM `uploads` WHERE (`uploads`.`id` = 5)
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/6/original/collaborators.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[36mSQL (0.3ms)[0m  [1mDELETE FROM `uploads` WHERE (`uploads`.`id` = 6)[0m
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/7/original/collaborators.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[35mSQL (0.3ms)[0m  DELETE FROM `uploads` WHERE (`uploads`.`id` = 7)
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/8/original/anchor.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[36mSQL (0.3ms)[0m  [1mDELETE FROM `uploads` WHERE (`uploads`.`id` = 8)[0m
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/9/original/application_add.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[35mSQL (0.2ms)[0m  DELETE FROM `uploads` WHERE (`uploads`.`id` = 9)
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/10/original/text_smallcaps.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[36mSQL (0.2ms)[0m  [1mDELETE FROM `uploads` WHERE (`uploads`.`id` = 10)[0m
+  [1m[35mSQL (0.4ms)[0m  DELETE FROM `users` WHERE (`users`.`id` = 1)
+  [1m[36mSQL (1.2ms)[0m  [1mCOMMIT[0m
+Redirected to http://localhost:3000/users
+Completed 302 Found in 147ms
+
+
+Started GET "/users" for 127.0.0.1 at 2010-09-17 22:27:54 -0400
+  Processing by UsersController#index as HTML
+  [1m[35mUser Load (0.5ms)[0m  SELECT `users`.* FROM `users`
+Rendered users/index.html.erb within layouts/application (3.7ms)
+Completed 200 OK in 15ms (Views: 7.2ms | ActiveRecord: 0.5ms)
+
+
+Started GET "/users" for 127.0.0.1 at 2010-09-17 22:42:14 -0400
+  Processing by UsersController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT `users`.* FROM `users`[0m
+Rendered users/index.html.erb within layouts/application (1.9ms)
+Completed 200 OK in 17ms (Views: 4.8ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/users/new" for 127.0.0.1 at 2010-09-17 22:42:16 -0400
+  Processing by UsersController#new as HTML
+Rendered users/_form.html.erb (6.3ms)
+Rendered users/new.html.erb within layouts/application (9.6ms)
+Completed 200 OK in 101ms (Views: 44.7ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/users" for 127.0.0.1 at 2010-09-17 22:42:20 -0400
+  Processing by UsersController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "user"=>{"name"=>"Amit"}, "commit"=>"Create User"}
+  [1m[35mSQL (20.6ms)[0m  BEGIN
+  [1m[36mSQL (33.5ms)[0m  [1mdescribe `users`[0m
+  [1m[35mSQL (16.4ms)[0m  INSERT INTO `users` (`created_at`, `name`, `updated_at`) VALUES ('2010-09-18 02:42:20', 'Amit', '2010-09-18 02:42:20')
+  [1m[36mSQL (15.5ms)[0m  [1mCOMMIT[0m
+Redirected to http://localhost:3000/users/2
+Completed 302 Found in 161ms
+
+
+Started GET "/users/2" for 127.0.0.1 at 2010-09-17 22:42:20 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[35mUser Load (16.9ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 2) LIMIT 1
+  [1m[36mUpload Load (25.4ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 2)[0m
+Rendered collection (0.0ms)
+Rendered users/_show.html.erb (1.2ms)
+Rendered users/show.html.erb within layouts/application (22.4ms)
+Completed 200 OK in 138ms (Views: 25.5ms | ActiveRecord: 42.3ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 22:42:29 -0400
+  Processing by UploadsController#create as JS
+  Parameters: {"Filename"=>"application_add.png", "_uploadify_session"=>"BAh7CEkiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEZJIgpmbGFzaAY7AEZJQzolQWN0aW9uRGlzcGF0Y2g6OkZsYXNoOjpGbGFzaEhhc2h7BjoLbm90aWNlSSIjVXNlciB3YXMgc3VjY2Vzc2Z1bGx5IGNyZWF0ZWQuBjsARgY6CkB1c2VkbzoIU2V0BjoKQGhhc2h7AA==--fe1a8cefc6c9c5c51ebe41ec736abd96c496bc1e", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "_http_accept"=>"application/javascript", "folder"=>"/users/", "user_id"=>"2", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-908-pyni03>, "Upload"=>"Submit Query"}
+  [1m[35mSQL (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.8ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 02:42:29', '[image/png]', 'application_add.png', 619, '2010-09-18 02:42:29', '2010-09-18 02:42:29', 2)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/11/original/application_add.png
+  [1m[35mSQL (2.2ms)[0m  COMMIT
+Completed 406 Not Acceptable in 58ms
+
+
+Started GET "/users/2" for 127.0.0.1 at 2010-09-17 22:45:31 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mSQL (0.5ms)[0m  [1mSHOW TABLES[0m
+  [1m[35mUser Load (38.2ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 2) LIMIT 1
+  [1m[36mUpload Load (0.4ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 2)[0m
+Rendered uploads/_upload.html.erb (1.9ms)
+Rendered users/_show.html.erb (1.3ms)
+Rendered users/show.html.erb within layouts/application (10.8ms)
+Completed 200 OK in 177ms (Views: 14.2ms | ActiveRecord: 39.1ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 22:45:39 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"accept.png", "_http_accept"=>"application/javascript", "folder"=>"/users/", "_uploadify_session"=>"BAh7CEkiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEZJIgpmbGFzaAY7AEZJQzolQWN0aW9uRGlzcGF0Y2g6OkZsYXNoOjpGbGFzaEhhc2h7BjoLbm90aWNlSSIjVXNlciB3YXMgc3VjY2Vzc2Z1bGx5IGNyZWF0ZWQuBjsARgY6CkB1c2VkbzoIU2V0BjoKQGhhc2h7BjsHVA==--65b60fc4c28a1e41ed17deb0dc2968fbeb41249c", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "user_id"=>"2", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-1380-drlqaz>, "Upload"=>"Submit Query"}
+  [1m[35mSQL (0.3ms)[0m  BEGIN
+  [1m[36mSQL (1.8ms)[0m  [1mdescribe `uploads`[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 02:45:39', '[image/png]', 'accept.png', 781, '2010-09-18 02:45:39', '2010-09-18 02:45:39', 2)
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/12/original/accept.png
+  [1m[36mSQL (1.1ms)[0m  [1mCOMMIT[0m
+Completed 200 OK in 78ms (Views: 1.7ms | ActiveRecord: 3.5ms)
+
+
+Started GET "/users/2" for 127.0.0.1 at 2010-09-17 22:50:14 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[35mUser Load (35.5ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 2) LIMIT 1
+  [1m[36mUpload Load (0.5ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 2)[0m
+Rendered uploads/_upload.html.erb (2.2ms)
+Rendered users/_show.html.erb (0.8ms)
+Rendered users/show.html.erb within layouts/application (8.5ms)
+Completed 200 OK in 116ms (Views: 11.5ms | ActiveRecord: 36.0ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 22:50:24 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"accept.png", "_http_accept"=>"application/javascript", "user_id"=>"2", "folder"=>"/users/", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-1380-1jcvgbw>, "Upload"=>"Submit Query"}
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '300x300>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,0' 2>/dev/null
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '100x100>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,1' 2>/dev/null
+  [1m[35mSQL (0.4ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 02:50:24', '[image/png]', 'accept.png', 781, '2010-09-18 02:50:24', '2010-09-18 02:50:24', 2)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/13/original/accept.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/13/medium/accept.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/13/thumb/accept.png
+  [1m[35mSQL (1.4ms)[0m  COMMIT
+Completed 200 OK in 734ms (Views: 1.4ms | ActiveRecord: 2.1ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 22:50:24 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"add.png", "_http_accept"=>"application/javascript", "user_id"=>"2", "folder"=>"/users/", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-1380-s413ky>, "Upload"=>"Submit Query"}
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '300x300>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,0' 2>/dev/null
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '100x100>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,1' 2>/dev/null
+  [1m[36mSQL (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 02:50:25', '[image/png]', 'add.png', 733, '2010-09-18 02:50:24', '2010-09-18 02:50:25', 2)
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/14/original/add.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/14/medium/add.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/14/thumb/add.png
+  [1m[36mSQL (1.0ms)[0m  [1mCOMMIT[0m
+Completed 200 OK in 129ms (Views: 1.5ms | ActiveRecord: 1.3ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 22:50:25 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"anchor.png", "_http_accept"=>"application/javascript", "user_id"=>"2", "folder"=>"/users/", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-1380-takpjl>, "Upload"=>"Submit Query"}
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '300x300>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,0' 2>/dev/null
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '100x100>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,1' 2>/dev/null
+  [1m[35mSQL (0.3ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 02:50:25', '[image/png]', 'anchor.png', 523, '2010-09-18 02:50:25', '2010-09-18 02:50:25', 2)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/15/original/anchor.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/15/medium/anchor.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/15/thumb/anchor.png
+  [1m[35mSQL (1.0ms)[0m  COMMIT
+Completed 200 OK in 138ms (Views: 1.4ms | ActiveRecord: 1.5ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 22:50:25 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"application_add.png", "_http_accept"=>"application/javascript", "folder"=>"/users/", "user_id"=>"2", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-1380-t42i7f>, "Upload"=>"Submit Query"}
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '300x300>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,0' 2>/dev/null
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '100x100>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,1' 2>/dev/null
+  [1m[36mSQL (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 02:50:25', '[image/png]', 'application_add.png', 619, '2010-09-18 02:50:25', '2010-09-18 02:50:25', 2)
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/16/original/application_add.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/16/medium/application_add.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/16/thumb/application_add.png
+  [1m[36mSQL (1.0ms)[0m  [1mCOMMIT[0m
+Completed 200 OK in 127ms (Views: 2.2ms | ActiveRecord: 1.4ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 22:51:33 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"3064355028_bc5e7b04e6.jpg", "_http_accept"=>"application/javascript", "folder"=>"/users/", "user_id"=>"2", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-1380-16d34h5>, "Upload"=>"Submit Query"}
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.jpg[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.jpg[0]' '-resize' '300x300>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,0' 2>/dev/null
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.jpg[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.jpg[0]' '-resize' '100x100>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,1' 2>/dev/null
+  [1m[35mSQL (0.2ms)[0m  BEGIN
+  [1m[36mSQL (1.8ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 02:51:34', '[image/jpeg]', '3064355028_bc5e7b04e6.jpg', 28223, '2010-09-18 02:51:33', '2010-09-18 02:51:34', 2)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/17/original/3064355028_bc5e7b04e6.jpg
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/17/medium/3064355028_bc5e7b04e6.jpg
+  [1m[35mSQL (1.6ms)[0m  ROLLBACK
+Completed   in 288ms
+
+Errno::ENOENT (No such file or directory - /var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,0):
+  app/controllers/uploads_controller.rb:46:in `create'
+  app/middleware/flash_session_cookie_middleware.rb:17:in `call'
+
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_trace.erb (1.0ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (5.3ms)
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (9.0ms)
+
+
+Started GET "/users/2" for 127.0.0.1 at 2010-09-17 22:52:09 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mUser Load (38.4ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 2) LIMIT 1[0m
+  [1m[35mUpload Load (0.3ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 2)
+Rendered uploads/_upload.html.erb (6.8ms)
+Rendered users/_show.html.erb (0.9ms)
+Rendered users/show.html.erb within layouts/application (13.9ms)
+Completed 200 OK in 92ms (Views: 17.1ms | ActiveRecord: 38.8ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-17 22:52:18 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"3064355028_bc5e7b04e6.jpg", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "folder"=>"/users/", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "_http_accept"=>"application/javascript", "user_id"=>"2", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100917-1380-1g6zyxk>, "Upload"=>"Submit Query"}
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.jpg[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.jpg[0]' '-resize' '300x300>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,0' 2>/dev/null
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.jpg[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.jpg[0]' '-resize' '100x100>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,1' 2>/dev/null
+  [1m[36mSQL (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 02:52:18', '[image/jpeg]', '3064355028_bc5e7b04e6.jpg', 28223, '2010-09-18 02:52:18', '2010-09-18 02:52:18', 2)
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/18/original/3064355028_bc5e7b04e6.jpg
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/18/medium/3064355028_bc5e7b04e6.jpg
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/18/thumb/3064355028_bc5e7b04e6.jpg
+  [1m[36mSQL (1.5ms)[0m  [1mCOMMIT[0m
+Completed 200 OK in 195ms (Views: 1.5ms | ActiveRecord: 1.9ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-18 09:38:09 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"DSC00037.JPG", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "folder"=>"/users/", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "_http_accept"=>"application/javascript", "user_id"=>"2", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100918-1380-1w8s348>, "Upload"=>"Submit Query"}
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.JPG[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.JPG[0]' '-resize' '300x300>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,0' 2>/dev/null
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.JPG[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.JPG[0]' '-resize' '100x100>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,1' 2>/dev/null
+  [1m[35mSQL (0.5ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 13:38:10', '[image/jpeg]', 'DSC00037.JPG', 3687597, '2010-09-18 13:38:10', '2010-09-18 13:38:10', 2)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/19/original/DSC00037.JPG
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/19/medium/DSC00037.JPG
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/19/thumb/DSC00037.JPG
+  [1m[35mSQL (1.3ms)[0m  COMMIT
+Completed 200 OK in 910ms (Views: 2.0ms | ActiveRecord: 2.0ms)
+
+
+Started GET "/users/2" for 127.0.0.1 at 2010-09-18 09:38:14 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mUser Load (39.8ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 2) LIMIT 1[0m
+  [1m[35mUpload Load (0.4ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 2)
+Rendered uploads/_upload.html.erb (6.8ms)
+Rendered users/_show.html.erb (1.1ms)
+Rendered users/show.html.erb within layouts/application (13.8ms)
+Completed 200 OK in 134ms (Views: 16.9ms | ActiveRecord: 40.2ms)
+
+
+Started GET "/users" for 127.0.0.1 at 2010-09-18 09:43:11 -0400
+  Processing by UsersController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT `users`.* FROM `users`[0m
+Rendered users/index.html.erb within layouts/application (7.6ms)
+Completed 200 OK in 19ms (Views: 10.5ms | ActiveRecord: 0.3ms)
+
+
+Started POST "/users/2" for 127.0.0.1 at 2010-09-18 09:43:17 -0400
+  Processing by UsersController#destroy as HTML
+  Parameters: {"authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "id"=>"2"}
+  [1m[35mUser Load (35.9ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 2) LIMIT 1
+  [1m[36mSQL (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mUpload Load (0.4ms)[0m  SELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 2)
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/11/original/application_add.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[36mSQL (1.2ms)[0m  [1mDELETE FROM `uploads` WHERE (`uploads`.`id` = 11)[0m
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/12/original/accept.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[35mSQL (0.4ms)[0m  DELETE FROM `uploads` WHERE (`uploads`.`id` = 12)
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/13/original/accept.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/13/medium/accept.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/13/thumb/accept.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[36mSQL (0.4ms)[0m  [1mDELETE FROM `uploads` WHERE (`uploads`.`id` = 13)[0m
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/14/original/add.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/14/medium/add.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/14/thumb/add.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[35mSQL (0.3ms)[0m  DELETE FROM `uploads` WHERE (`uploads`.`id` = 14)
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/15/original/anchor.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/15/medium/anchor.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/15/thumb/anchor.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[36mSQL (0.3ms)[0m  [1mDELETE FROM `uploads` WHERE (`uploads`.`id` = 15)[0m
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/16/original/application_add.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/16/medium/application_add.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/16/thumb/application_add.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[35mSQL (0.4ms)[0m  DELETE FROM `uploads` WHERE (`uploads`.`id` = 16)
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/18/original/3064355028_bc5e7b04e6.jpg
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/18/medium/3064355028_bc5e7b04e6.jpg
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/18/thumb/3064355028_bc5e7b04e6.jpg
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[36mSQL (0.3ms)[0m  [1mDELETE FROM `uploads` WHERE (`uploads`.`id` = 18)[0m
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/19/original/DSC00037.JPG
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/19/medium/DSC00037.JPG
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/19/thumb/DSC00037.JPG
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[35mSQL (0.4ms)[0m  DELETE FROM `uploads` WHERE (`uploads`.`id` = 19)
+  [1m[36mSQL (0.4ms)[0m  [1mDELETE FROM `users` WHERE (`users`.`id` = 2)[0m
+  [1m[35mSQL (1.5ms)[0m  COMMIT
+Redirected to http://localhost:3000/users
+Completed 302 Found in 164ms
+
+
+Started GET "/users" for 127.0.0.1 at 2010-09-18 09:43:17 -0400
+  Processing by UsersController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT `users`.* FROM `users`[0m
+Rendered users/index.html.erb within layouts/application (1.9ms)
+Completed 200 OK in 13ms (Views: 4.7ms | ActiveRecord: 0.5ms)
+
+
+Started GET "/users/new" for 127.0.0.1 at 2010-09-18 10:06:43 -0400
+  Processing by UsersController#new as HTML
+Rendered users/_form.html.erb (6.6ms)
+Rendered users/new.html.erb within layouts/application (9.5ms)
+Completed 200 OK in 61ms (Views: 52.1ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/users" for 127.0.0.1 at 2010-09-18 10:06:47 -0400
+  Processing by UsersController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "user"=>{"name"=>"Amit"}, "commit"=>"Create User"}
+  [1m[35mSQL (0.3ms)[0m  BEGIN
+  [1m[36mSQL (2.2ms)[0m  [1mdescribe `users`[0m
+  [1m[35mSQL (1.3ms)[0m  INSERT INTO `users` (`created_at`, `name`, `updated_at`) VALUES ('2010-09-18 14:06:47', 'Amit', '2010-09-18 14:06:47')
+  [1m[36mSQL (1.2ms)[0m  [1mCOMMIT[0m
+Redirected to http://localhost:3000/users/3
+Completed 302 Found in 61ms
+
+
+Started GET "/users/3" for 127.0.0.1 at 2010-09-18 10:06:47 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"3"}
+  [1m[35mUser Load (1.0ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 3) LIMIT 1
+  [1m[36mUpload Load (0.3ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 3)[0m
+Rendered collection (0.0ms)
+Rendered users/_show.html.erb (0.9ms)
+Rendered users/show.html.erb within layouts/application (13.6ms)
+Completed 200 OK in 48ms (Views: 16.6ms | ActiveRecord: 1.3ms)
+
+
+Started GET "/users/3" for 127.0.0.1 at 2010-09-18 10:10:25 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"3"}
+  [1m[35mUser Load (216.5ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 3) LIMIT 1
+  [1m[36mUpload Load (0.4ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 3)[0m
+Rendered collection (0.0ms)
+Rendered users/_show.html.erb (1.1ms)
+Rendered users/show.html.erb within layouts/application (14.9ms)
+Completed 200 OK in 312ms (Views: 18.1ms | ActiveRecord: 216.9ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-18 10:11:36 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"accept.png", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "folder"=>"/users/", "user_id"=>"3", "_http_accept"=>"application/javascript", "_uploadify_session"=>"BAh7CEkiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEZJIgpmbGFzaAY7AEZJQzolQWN0aW9uRGlzcGF0Y2g6OkZsYXNoOjpGbGFzaEhhc2h7BjoLbm90aWNlSSIjVXNlciB3YXMgc3VjY2Vzc2Z1bGx5IGNyZWF0ZWQuBjsARgY6CkB1c2VkbzoIU2V0BjoKQGhhc2h7BjsHVA==--65b60fc4c28a1e41ed17deb0dc2968fbeb41249c", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100918-1380-4t9940>, "Upload"=>"Submit Query"}
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '300x300>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,0' 2>/dev/null
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '100x100>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,1' 2>/dev/null
+  [1m[35mSQL (0.3ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 14:11:36', '[image/png]', 'accept.png', 781, '2010-09-18 14:11:36', '2010-09-18 14:11:36', 3)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/20/original/accept.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/20/medium/accept.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/20/thumb/accept.png
+  [1m[35mSQL (1.2ms)[0m  COMMIT
+Completed 200 OK in 128ms (Views: 1.4ms | ActiveRecord: 1.7ms)
+
+
+Started GET "/uploads/20" for 127.0.0.1 at 2010-09-18 10:11:36 -0400
+  Processing by UploadsController#show as JS
+  Parameters: {"id"=>"20"}
+  [1m[36mUpload Load (0.5ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`id` = 20) LIMIT 1[0m
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 3)
+  [1m[36mUpload Load (0.4ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`user_id` = 3)[0m
+Rendered uploads/show.html.erb within layouts/application (2.5ms)
+Completed 200 OK in 83ms (Views: 7.4ms | ActiveRecord: 1.3ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-18 10:11:37 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"add.png", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "folder"=>"/users/", "user_id"=>"3", "_http_accept"=>"application/javascript", "_uploadify_session"=>"BAh7CEkiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEZJIgpmbGFzaAY7AEZJQzolQWN0aW9uRGlzcGF0Y2g6OkZsYXNoOjpGbGFzaEhhc2h7BjoLbm90aWNlSSIjVXNlciB3YXMgc3VjY2Vzc2Z1bGx5IGNyZWF0ZWQuBjsARgY6CkB1c2VkbzoIU2V0BjoKQGhhc2h7BjsHVA==--65b60fc4c28a1e41ed17deb0dc2968fbeb41249c", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100918-1380-1rpiojl>, "Upload"=>"Submit Query"}
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '300x300>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,0' 2>/dev/null
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '100x100>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,1' 2>/dev/null
+  [1m[35mSQL (0.8ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 14:11:37', '[image/png]', 'add.png', 733, '2010-09-18 14:11:37', '2010-09-18 14:11:37', 3)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/21/original/add.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/21/medium/add.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/21/thumb/add.png
+  [1m[35mSQL (1.1ms)[0m  COMMIT
+Completed 200 OK in 195ms (Views: 2.6ms | ActiveRecord: 2.2ms)
+
+
+Started GET "/uploads/21" for 127.0.0.1 at 2010-09-18 10:11:37 -0400
+  Processing by UploadsController#show as JS
+  Parameters: {"id"=>"21"}
+  [1m[36mUpload Load (0.5ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`id` = 21) LIMIT 1[0m
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 3)
+  [1m[36mUpload Load (0.6ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`user_id` = 3)[0m
+Rendered uploads/show.html.erb within layouts/application (3.4ms)
+Completed 200 OK in 57ms (Views: 7.5ms | ActiveRecord: 1.4ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-18 10:11:37 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"anchor.png", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "folder"=>"/users/", "user_id"=>"3", "_http_accept"=>"application/javascript", "_uploadify_session"=>"BAh7CEkiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEZJIgpmbGFzaAY7AEZJQzolQWN0aW9uRGlzcGF0Y2g6OkZsYXNoOjpGbGFzaEhhc2h7BjoLbm90aWNlSSIjVXNlciB3YXMgc3VjY2Vzc2Z1bGx5IGNyZWF0ZWQuBjsARgY6CkB1c2VkbzoIU2V0BjoKQGhhc2h7BjsHVA==--65b60fc4c28a1e41ed17deb0dc2968fbeb41249c", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100918-1380-jt18pe>, "Upload"=>"Submit Query"}
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '300x300>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,0' 2>/dev/null
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '100x100>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,1' 2>/dev/null
+  [1m[35mSQL (0.2ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 14:11:37', '[image/png]', 'anchor.png', 523, '2010-09-18 14:11:37', '2010-09-18 14:11:37', 3)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/22/original/anchor.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/22/medium/anchor.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/22/thumb/anchor.png
+  [1m[35mSQL (1.1ms)[0m  COMMIT
+Completed 200 OK in 147ms (Views: 2.9ms | ActiveRecord: 1.5ms)
+
+
+Started GET "/uploads/22" for 127.0.0.1 at 2010-09-18 10:11:37 -0400
+  Processing by UploadsController#show as JS
+  Parameters: {"id"=>"22"}
+  [1m[36mUpload Load (0.7ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`id` = 22) LIMIT 1[0m
+  [1m[35mUser Load (0.3ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 3)
+  [1m[36mUpload Load (0.4ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`user_id` = 3)[0m
+Rendered uploads/show.html.erb within layouts/application (2.3ms)
+Completed 200 OK in 50ms (Views: 5.9ms | ActiveRecord: 1.3ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-18 10:11:37 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"application_add.png", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "folder"=>"/users/", "user_id"=>"3", "_http_accept"=>"application/javascript", "_uploadify_session"=>"BAh7CEkiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEZJIgpmbGFzaAY7AEZJQzolQWN0aW9uRGlzcGF0Y2g6OkZsYXNoOjpGbGFzaEhhc2h7BjoLbm90aWNlSSIjVXNlciB3YXMgc3VjY2Vzc2Z1bGx5IGNyZWF0ZWQuBjsARgY6CkB1c2VkbzoIU2V0BjoKQGhhc2h7BjsHVA==--65b60fc4c28a1e41ed17deb0dc2968fbeb41249c", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100918-1380-1dv26vj>, "Upload"=>"Submit Query"}
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '300x300>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,0' 2>/dev/null
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '100x100>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,1' 2>/dev/null
+  [1m[35mSQL (0.3ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 14:11:37', '[image/png]', 'application_add.png', 619, '2010-09-18 14:11:37', '2010-09-18 14:11:37', 3)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/23/original/application_add.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/23/medium/application_add.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/23/thumb/application_add.png
+  [1m[35mSQL (1.0ms)[0m  COMMIT
+Completed 200 OK in 137ms (Views: 1.4ms | ActiveRecord: 1.5ms)
+
+
+Started GET "/uploads/23" for 127.0.0.1 at 2010-09-18 10:11:37 -0400
+  Processing by UploadsController#show as JS
+  Parameters: {"id"=>"23"}
+  [1m[36mUpload Load (0.5ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`id` = 23) LIMIT 1[0m
+  [1m[35mUser Load (0.3ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 3)
+  [1m[36mUpload Load (0.4ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`user_id` = 3)[0m
+Rendered uploads/show.html.erb within layouts/application (2.5ms)
+Completed 200 OK in 106ms (Views: 5.7ms | ActiveRecord: 1.2ms)
+
+
+Started GET "/users/3" for 127.0.0.1 at 2010-09-18 10:27:55 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"3"}
+  [1m[35mUser Load (2.0ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 3) LIMIT 1
+  [1m[36mUpload Load (0.4ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 3)[0m
+Rendered uploads/_upload.html.erb (4.1ms)
+Rendered users/_show.html.erb (1.0ms)
+Rendered users/show.html.erb within layouts/application (19.5ms)
+Completed 200 OK in 115ms (Views: 22.5ms | ActiveRecord: 2.4ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-18 10:28:03 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"application_add.png", "_http_accept"=>"application/javascript", "folder"=>"/users/", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "user_id"=>"3", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100918-1380-1lit7da>, "Upload"=>"Submit Query"}
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '300x300>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,0' 2>/dev/null
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '100x100>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,1' 2>/dev/null
+  [1m[35mSQL (0.7ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 14:28:03', '[image/png]', 'application_add.png', 619, '2010-09-18 14:28:03', '2010-09-18 14:28:03', 3)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/24/original/application_add.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/24/medium/application_add.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/24/thumb/application_add.png
+  [1m[35mSQL (21.0ms)[0m  COMMIT
+Completed 200 OK in 493ms (Views: 1.4ms | ActiveRecord: 22.0ms)
+
+
+Started GET "/uploads/24" for 127.0.0.1 at 2010-09-18 10:28:03 -0400
+  Processing by UploadsController#show as JS
+  Parameters: {"id"=>"24"}
+  [1m[36mUpload Load (1.4ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`id` = 24) LIMIT 1[0m
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 3)
+  [1m[36mUpload Load (0.3ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`user_id` = 3)[0m
+Rendered uploads/show.html.erb within layouts/application (2.4ms)
+Completed 200 OK in 66ms (Views: 12.1ms | ActiveRecord: 2.1ms)
+
+
+Started GET "/users/3" for 127.0.0.1 at 2010-09-18 10:28:19 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"3"}
+  [1m[35mUser Load (39.9ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 3) LIMIT 1
+  [1m[36mUpload Load (0.3ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 3)[0m
+Rendered uploads/_upload.html.erb (4.8ms)
+Rendered users/_show.html.erb (1.0ms)
+Rendered users/show.html.erb within layouts/application (12.2ms)
+Completed 200 OK in 92ms (Views: 15.3ms | ActiveRecord: 40.2ms)
+
+
+Started GET "/users/3" for 127.0.0.1 at 2010-09-18 10:38:35 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"3"}
+  [1m[35mUser Load (38.3ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 3) LIMIT 1
+  [1m[36mUpload Load (0.3ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 3)[0m
+Rendered uploads/_upload.html.erb (4.9ms)
+Rendered users/_show.html.erb (1.0ms)
+Rendered users/show.html.erb within layouts/application (11.7ms)
+Completed 200 OK in 89ms (Views: 14.9ms | ActiveRecord: 38.6ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-18 10:38:42 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"application_edit.png", "folder"=>"/users/", "_http_accept"=>"application/javascript", "user_id"=>"3", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100918-1380-1br7nah>, "Upload"=>"Submit Query"}
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '300x300>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,0' 2>/dev/null
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '100x100>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,1' 2>/dev/null
+  [1m[35mSQL (0.8ms)[0m  BEGIN
+  [1m[36mSQL (0.8ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 14:38:42', '[image/png]', 'application_edit.png', 703, '2010-09-18 14:38:42', '2010-09-18 14:38:42', 3)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/25/original/application_edit.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/25/medium/application_edit.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/25/thumb/application_edit.png
+  [1m[35mSQL (1.4ms)[0m  COMMIT
+Completed 200 OK in 134ms (Views: 1.5ms | ActiveRecord: 3.1ms)
+
+
+Started GET "/uploads/25" for 127.0.0.1 at 2010-09-18 10:38:42 -0400
+  Processing by UploadsController#show as JS
+  Parameters: {"id"=>"25"}
+  [1m[36mUpload Load (0.8ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`id` = 25) LIMIT 1[0m
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 3)
+  [1m[36mUpload Load (0.3ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`user_id` = 3)[0m
+Rendered uploads/show.html.erb within layouts/application (2.1ms)
+Completed 200 OK in 50ms (Views: 6.6ms | ActiveRecord: 1.6ms)
+
+
+Started GET "/users/3" for 127.0.0.1 at 2010-09-18 10:40:00 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"3"}
+  [1m[35mUser Load (34.8ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 3) LIMIT 1
+  [1m[36mUpload Load (0.4ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 3)[0m
+Rendered uploads/_upload.html.erb (5.2ms)
+Rendered users/_show.html.erb (1.4ms)
+Rendered users/show.html.erb within layouts/application (12.4ms)
+Completed 200 OK in 85ms (Views: 15.4ms | ActiveRecord: 35.2ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-18 10:40:05 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"application_cascade.png", "_http_accept"=>"application/javascript", "folder"=>"/users/", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "user_id"=>"3", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100918-1380-1kjgf5j>, "Upload"=>"Submit Query"}
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '300x300>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,0' 2>/dev/null
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '100x100>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,1' 2>/dev/null
+  [1m[35mSQL (0.2ms)[0m  BEGIN
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 14:40:06', '[image/png]', 'application_cascade.png', 524, '2010-09-18 14:40:05', '2010-09-18 14:40:06', 3)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/26/original/application_cascade.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/26/medium/application_cascade.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/26/thumb/application_cascade.png
+  [1m[35mSQL (1.3ms)[0m  COMMIT
+Completed 200 OK in 121ms (Views: 1.4ms | ActiveRecord: 1.9ms)
+
+
+Started GET "/uploads/26" for 127.0.0.1 at 2010-09-18 10:40:06 -0400
+  Processing by UploadsController#show as JS
+  Parameters: {"id"=>"26"}
+  [1m[36mUpload Load (0.6ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`id` = 26) LIMIT 1[0m
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 3)
+  [1m[36mUpload Load (0.5ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`user_id` = 3)[0m
+Completed   in 75ms
+
+ActionView::MissingTemplate (Missing template uploads/show with {:handlers=>[:erb, :rjs, :builder, :rhtml, :rxml], :formats=>[:html], :locale=>[:en, :en]} in view paths "/Users/amitgaur/Programming/RailsApps/uploadify/app/views"):
+  app/controllers/uploads_controller.rb:19:in `show'
+  app/middleware/flash_session_cookie_middleware.rb:17:in `call'
+
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/missing_template.erb within rescues/layout (1.4ms)
+
+
+Started GET "/users/3" for 127.0.0.1 at 2010-09-18 10:44:23 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"3"}
+  [1m[35mUser Load (36.8ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 3) LIMIT 1
+  [1m[36mUpload Load (0.3ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 3)[0m
+Rendered uploads/_upload.html.erb (6.0ms)
+Rendered users/_show.html.erb (0.9ms)
+Rendered users/show.html.erb within layouts/application (12.9ms)
+Completed 200 OK in 128ms (Views: 15.7ms | ActiveRecord: 37.1ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-18 10:44:29 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"application_delete.png", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "folder"=>"/users/", "user_id"=>"3", "_http_accept"=>"application/javascript", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100918-1380-arcxpq>, "Upload"=>"Submit Query"}
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '300x300>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,0' 2>/dev/null
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '100x100>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,1' 2>/dev/null
+  [1m[35mSQL (0.7ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 14:44:29', '[image/png]', 'application_delete.png', 610, '2010-09-18 14:44:29', '2010-09-18 14:44:29', 3)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/27/original/application_delete.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/27/medium/application_delete.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/27/thumb/application_delete.png
+  [1m[35mSQL (1.0ms)[0m  COMMIT
+Completed 200 OK in 118ms (Views: 1.5ms | ActiveRecord: 1.9ms)
+
+
+Started GET "/uploads/27" for 127.0.0.1 at 2010-09-18 10:44:29 -0400
+  Processing by UploadsController#show as JS
+  Parameters: {"id"=>"27"}
+  [1m[36mUpload Load (0.5ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`id` = 27) LIMIT 1[0m
+  [1m[35mUser Load (0.2ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 3)
+  [1m[36mUpload Load (0.4ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`user_id` = 3)[0m
+Rendered uploads/_upload.html.erb (1.6ms)
+Rendered uploads/show.js.erb (3.4ms)
+Completed 200 OK in 107ms (Views: 10.0ms | ActiveRecord: 1.1ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-18 10:44:48 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"application_side_contract.png", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "folder"=>"/users/", "user_id"=>"3", "_http_accept"=>"application/javascript", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100918-1380-5ejkf9>, "Upload"=>"Submit Query"}
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '300x300>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,0' 2>/dev/null
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '100x100>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,1' 2>/dev/null
+  [1m[35mSQL (1.4ms)[0m  BEGIN
+  [1m[36mSQL (0.9ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 14:44:48', '[image/png]', 'application_side_contract.png', 547, '2010-09-18 14:44:48', '2010-09-18 14:44:48', 3)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/28/original/application_side_contract.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/28/medium/application_side_contract.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/28/thumb/application_side_contract.png
+  [1m[35mSQL (1.1ms)[0m  COMMIT
+Completed 200 OK in 117ms (Views: 1.5ms | ActiveRecord: 3.4ms)
+
+
+Started GET "/uploads/28" for 127.0.0.1 at 2010-09-18 10:44:48 -0400
+  Processing by UploadsController#show as JS
+  Parameters: {"id"=>"28"}
+  [1m[36mUpload Load (1.0ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`id` = 28) LIMIT 1[0m
+  [1m[35mUser Load (0.3ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 3)
+  [1m[36mUpload Load (0.4ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`user_id` = 3)[0m
+Rendered uploads/_upload.html.erb (2.5ms)
+Rendered uploads/show.js.erb (5.6ms)
+Completed 200 OK in 59ms (Views: 11.1ms | ActiveRecord: 1.7ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-18 10:44:48 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"application_side_expand.png", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "folder"=>"/users/", "user_id"=>"3", "_http_accept"=>"application/javascript", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100918-1380-fvr2to>, "Upload"=>"Submit Query"}
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '300x300>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,0' 2>/dev/null
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '100x100>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,1' 2>/dev/null
+  [1m[35mSQL (0.7ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 14:44:48', '[image/png]', 'application_side_expand.png', 581, '2010-09-18 14:44:48', '2010-09-18 14:44:48', 3)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/29/original/application_side_expand.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/29/medium/application_side_expand.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/29/thumb/application_side_expand.png
+  [1m[35mSQL (1.2ms)[0m  COMMIT
+Completed 200 OK in 135ms (Views: 1.5ms | ActiveRecord: 2.2ms)
+
+
+Started GET "/uploads/29" for 127.0.0.1 at 2010-09-18 10:44:48 -0400
+  Processing by UploadsController#show as JS
+  Parameters: {"id"=>"29"}
+  [1m[36mUpload Load (0.8ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`id` = 29) LIMIT 1[0m
+  [1m[35mUser Load (0.3ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 3)
+  [1m[36mUpload Load (0.4ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`user_id` = 3)[0m
+Rendered uploads/_upload.html.erb (2.2ms)
+Rendered uploads/show.js.erb (4.8ms)
+Completed 200 OK in 58ms (Views: 9.8ms | ActiveRecord: 1.4ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-18 10:44:48 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"application_side_list.png", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "folder"=>"/users/", "user_id"=>"3", "_http_accept"=>"application/javascript", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100918-1380-6n5mj1>, "Upload"=>"Submit Query"}
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] An error was received while processing: #<Paperclip::NotIdentifiedByImageMagickError: /var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png is not recognized by the 'identify' command.>
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] An error was received while processing: #<Paperclip::NotIdentifiedByImageMagickError: /var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png is not recognized by the 'identify' command.>
+  [1m[35mSQL (0.3ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mROLLBACK[0m
+Completed   in 173ms
+
+ActionView::MissingTemplate (Missing template uploads/new with {:handlers=>[:erb, :rjs, :builder, :rhtml, :rxml], :formats=>[:json], :locale=>[:en, :en]} in view paths "/Users/amitgaur/Programming/RailsApps/uploadify/app/views"):
+  app/controllers/uploads_controller.rb:48:in `create'
+  app/middleware/flash_session_cookie_middleware.rb:17:in `call'
+
+Rendered /Users/amitgaur/.rvm/gems/ruby-1.9.2-p0/gems/actionpack-3.0.0/lib/action_dispatch/middleware/templates/rescues/missing_template.erb within rescues/layout (0.9ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-18 10:44:49 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"application_side_tree.png", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "folder"=>"/users/", "user_id"=>"3", "_http_accept"=>"application/javascript", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100918-1380-15lx6ux>, "Upload"=>"Submit Query"}
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '300x300>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,0' 2>/dev/null
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '100x100>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,1' 2>/dev/null
+  [1m[35mSQL (0.4ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 14:44:49', '[image/png]', 'application_side_tree.png', 483, '2010-09-18 14:44:49', '2010-09-18 14:44:49', 3)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/30/original/application_side_tree.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/30/medium/application_side_tree.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/30/thumb/application_side_tree.png
+  [1m[35mSQL (1.2ms)[0m  COMMIT
+Completed 200 OK in 116ms (Views: 1.4ms | ActiveRecord: 1.9ms)
+
+
+Started GET "/uploads/30" for 127.0.0.1 at 2010-09-18 10:44:49 -0400
+  Processing by UploadsController#show as JS
+  Parameters: {"id"=>"30"}
+  [1m[36mUpload Load (0.7ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`id` = 30) LIMIT 1[0m
+  [1m[35mUser Load (0.3ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 3)
+  [1m[36mUpload Load (0.4ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`user_id` = 3)[0m
+Rendered uploads/_upload.html.erb (2.3ms)
+Rendered uploads/show.js.erb (4.9ms)
+Completed 200 OK in 56ms (Views: 10.6ms | ActiveRecord: 1.4ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-18 10:44:49 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"application_split.png", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "folder"=>"/users/", "user_id"=>"3", "_http_accept"=>"application/javascript", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100918-1380-14defhj>, "Upload"=>"Submit Query"}
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '300x300>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,0' 2>/dev/null
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '100x100>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,1' 2>/dev/null
+  [1m[35mSQL (0.7ms)[0m  BEGIN
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 14:44:49', '[image/png]', 'application_split.png', 520, '2010-09-18 14:44:49', '2010-09-18 14:44:49', 3)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/31/original/application_split.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/31/medium/application_split.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/31/thumb/application_split.png
+  [1m[35mSQL (1.2ms)[0m  COMMIT
+Completed 200 OK in 191ms (Views: 1.9ms | ActiveRecord: 2.3ms)
+
+
+Started GET "/uploads/31" for 127.0.0.1 at 2010-09-18 10:44:49 -0400
+  Processing by UploadsController#show as JS
+  Parameters: {"id"=>"31"}
+  [1m[36mUpload Load (0.7ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`id` = 31) LIMIT 1[0m
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 3)
+  [1m[36mUpload Load (0.3ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`user_id` = 3)[0m
+Rendered uploads/_upload.html.erb (1.8ms)
+Rendered uploads/show.js.erb (3.9ms)
+Completed 200 OK in 54ms (Views: 8.8ms | ActiveRecord: 1.4ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-18 10:44:49 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"application_start.png", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "folder"=>"/users/", "user_id"=>"3", "_http_accept"=>"application/javascript", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100918-1380-1vrm3qs>, "Upload"=>"Submit Query"}
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '300x300>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,0' 2>/dev/null
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '100x100>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,1' 2>/dev/null
+  [1m[35mSQL (0.7ms)[0m  BEGIN
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 14:44:49', '[image/png]', 'application_start.png', 685, '2010-09-18 14:44:49', '2010-09-18 14:44:49', 3)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/32/original/application_start.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/32/medium/application_start.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/32/thumb/application_start.png
+  [1m[35mSQL (0.9ms)[0m  COMMIT
+Completed 200 OK in 153ms (Views: 2.3ms | ActiveRecord: 2.0ms)
+
+
+Started GET "/uploads/32" for 127.0.0.1 at 2010-09-18 10:44:49 -0400
+  Processing by UploadsController#show as JS
+  Parameters: {"id"=>"32"}
+  [1m[36mUpload Load (0.5ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`id` = 32) LIMIT 1[0m
+  [1m[35mUser Load (0.3ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 3)
+  [1m[36mUpload Load (0.5ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`user_id` = 3)[0m
+Rendered uploads/_upload.html.erb (2.6ms)
+Rendered uploads/show.js.erb (5.5ms)
+Completed 200 OK in 51ms (Views: 11.7ms | ActiveRecord: 1.3ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-18 10:44:50 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"application_stop.png", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "folder"=>"/users/", "user_id"=>"3", "_http_accept"=>"application/javascript", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100918-1380-11vkz30>, "Upload"=>"Submit Query"}
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '300x300>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,0' 2>/dev/null
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '100x100>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,1' 2>/dev/null
+  [1m[35mSQL (0.6ms)[0m  BEGIN
+  [1m[36mSQL (0.6ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 14:44:50', '[image/png]', 'application_stop.png', 652, '2010-09-18 14:44:50', '2010-09-18 14:44:50', 3)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/33/original/application_stop.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/33/medium/application_stop.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/33/thumb/application_stop.png
+  [1m[35mSQL (1.2ms)[0m  COMMIT
+Completed 200 OK in 133ms (Views: 1.5ms | ActiveRecord: 2.4ms)
+
+
+Started GET "/uploads/33" for 127.0.0.1 at 2010-09-18 10:44:50 -0400
+  Processing by UploadsController#show as JS
+  Parameters: {"id"=>"33"}
+  [1m[36mUpload Load (0.9ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`id` = 33) LIMIT 1[0m
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 3)
+  [1m[36mUpload Load (0.5ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`user_id` = 3)[0m
+Rendered uploads/_upload.html.erb (2.1ms)
+Rendered uploads/show.js.erb (4.2ms)
+Completed 200 OK in 104ms (Views: 9.7ms | ActiveRecord: 1.7ms)
+
+
+Started POST "/uploads" for 127.0.0.1 at 2010-09-18 10:44:50 -0400
+  Processing by UploadsController#create as JSON
+  Parameters: {"Filename"=>"application_tile_horizontal.png", "_uploadify_session"=>"BAh7B0kiD3Nlc3Npb25faWQGOgZFRiIlZTM1ZWY4YTEyYzdhMDY4NTVlMGVlOWY4NDZkOGM2MzlJIhBfY3NyZl90b2tlbgY7AEZJIjFDZG14VUQxS000Q1hnMktFYk9WMnlINnpxMGM0MllOanVFOFZxdk1qWVY4PQY7AEY=--86ae3d486c66ca24b32af25490d4020696b54b44", "authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "folder"=>"/users/", "user_id"=>"3", "_http_accept"=>"application/javascript", "Filedata"=>#<File:/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/RackMultipart20100918-1380-168s2yd>, "Upload"=>"Submit Query"}
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '300x300>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,0' 2>/dev/null
+[paperclip] identify '-format' '%wx%h' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' 2>/dev/null
+[paperclip] convert '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0.png[0]' '-resize' '100x100>' '/var/folders/8B/8BMxjHsRF9e+t2p5WyECrk+++TI/-Tmp-/stream,1380,0,1380,1' 2>/dev/null
+  [1m[35mSQL (0.5ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO `uploads` (`created_at`, `photo_content_type`, `photo_file_name`, `photo_file_size`, `photo_updated_at`, `updated_at`, `user_id`) VALUES ('2010-09-18 14:44:50', '[image/png]', 'application_tile_horizontal.png', 432, '2010-09-18 14:44:50', '2010-09-18 14:44:50', 3)[0m
+[paperclip] Saving attachments.
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/34/original/application_tile_horizontal.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/34/medium/application_tile_horizontal.png
+[paperclip] saving /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/34/thumb/application_tile_horizontal.png
+  [1m[35mSQL (1.1ms)[0m  COMMIT
+Completed 200 OK in 133ms (Views: 1.6ms | ActiveRecord: 1.9ms)
+
+
+Started GET "/uploads/34" for 127.0.0.1 at 2010-09-18 10:44:50 -0400
+  Processing by UploadsController#show as JS
+  Parameters: {"id"=>"34"}
+  [1m[36mUpload Load (0.7ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`id` = 34) LIMIT 1[0m
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 3)
+  [1m[36mUpload Load (0.4ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.`user_id` = 3)[0m
+Rendered uploads/_upload.html.erb (2.0ms)
+Rendered uploads/show.js.erb (4.7ms)
+Completed 200 OK in 54ms (Views: 10.3ms | ActiveRecord: 1.6ms)
+
+
+Started GET "/users/3" for 127.0.0.1 at 2010-09-18 10:47:21 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"3"}
+  [1m[35mUser Load (37.3ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 3) LIMIT 1
+  [1m[36mUpload Load (0.4ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 3)[0m
+Rendered uploads/_upload.html.erb (11.8ms)
+Rendered users/_show.html.erb (1.0ms)
+Rendered users/show.html.erb within layouts/application (18.5ms)
+Completed 200 OK in 96ms (Views: 21.4ms | ActiveRecord: 37.7ms)
+
+
+Started GET "/users" for 127.0.0.1 at 2010-09-18 10:47:24 -0400
+  Processing by UsersController#index as HTML
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users`
+Rendered users/index.html.erb within layouts/application (8.1ms)
+Completed 200 OK in 20ms (Views: 11.0ms | ActiveRecord: 0.4ms)
+
+
+Started POST "/users/3" for 127.0.0.1 at 2010-09-18 10:47:28 -0400
+  Processing by UsersController#destroy as HTML
+  Parameters: {"authenticity_token"=>"CdmxUD1KM4CXg2KEbOV2yH6zq0c42YNjuE8VqvMjYV8=", "id"=>"3"}
+  [1m[36mUser Load (39.4ms)[0m  [1mSELECT `users`.* FROM `users` WHERE (`users`.`id` = 3) LIMIT 1[0m
+  [1m[35mSQL (0.2ms)[0m  BEGIN
+  [1m[36mUpload Load (0.5ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 3)[0m
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/20/original/accept.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/20/medium/accept.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/20/thumb/accept.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[35mSQL (1.4ms)[0m  DELETE FROM `uploads` WHERE (`uploads`.`id` = 20)
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/21/original/add.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/21/medium/add.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/21/thumb/add.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[36mSQL (0.3ms)[0m  [1mDELETE FROM `uploads` WHERE (`uploads`.`id` = 21)[0m
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/22/original/anchor.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/22/medium/anchor.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/22/thumb/anchor.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[35mSQL (0.3ms)[0m  DELETE FROM `uploads` WHERE (`uploads`.`id` = 22)
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/23/original/application_add.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/23/medium/application_add.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/23/thumb/application_add.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[36mSQL (0.5ms)[0m  [1mDELETE FROM `uploads` WHERE (`uploads`.`id` = 23)[0m
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/24/original/application_add.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/24/medium/application_add.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/24/thumb/application_add.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[35mSQL (0.3ms)[0m  DELETE FROM `uploads` WHERE (`uploads`.`id` = 24)
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/25/original/application_edit.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/25/medium/application_edit.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/25/thumb/application_edit.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[36mSQL (0.4ms)[0m  [1mDELETE FROM `uploads` WHERE (`uploads`.`id` = 25)[0m
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/26/original/application_cascade.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/26/medium/application_cascade.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/26/thumb/application_cascade.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[35mSQL (0.4ms)[0m  DELETE FROM `uploads` WHERE (`uploads`.`id` = 26)
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/27/original/application_delete.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/27/medium/application_delete.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/27/thumb/application_delete.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[36mSQL (0.4ms)[0m  [1mDELETE FROM `uploads` WHERE (`uploads`.`id` = 27)[0m
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/28/original/application_side_contract.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/28/medium/application_side_contract.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/28/thumb/application_side_contract.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[35mSQL (0.4ms)[0m  DELETE FROM `uploads` WHERE (`uploads`.`id` = 28)
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/29/original/application_side_expand.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/29/medium/application_side_expand.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/29/thumb/application_side_expand.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[36mSQL (0.3ms)[0m  [1mDELETE FROM `uploads` WHERE (`uploads`.`id` = 29)[0m
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/30/original/application_side_tree.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/30/medium/application_side_tree.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/30/thumb/application_side_tree.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[35mSQL (0.3ms)[0m  DELETE FROM `uploads` WHERE (`uploads`.`id` = 30)
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/31/original/application_split.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/31/medium/application_split.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/31/thumb/application_split.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[36mSQL (0.3ms)[0m  [1mDELETE FROM `uploads` WHERE (`uploads`.`id` = 31)[0m
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/32/original/application_start.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/32/medium/application_start.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/32/thumb/application_start.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[35mSQL (0.4ms)[0m  DELETE FROM `uploads` WHERE (`uploads`.`id` = 32)
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/33/original/application_stop.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/33/medium/application_stop.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/33/thumb/application_stop.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[36mSQL (0.6ms)[0m  [1mDELETE FROM `uploads` WHERE (`uploads`.`id` = 33)[0m
+[paperclip] Deleting attachments.
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/34/original/application_tile_horizontal.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/34/medium/application_tile_horizontal.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+[paperclip] deleting /Users/amitgaur/Programming/RailsApps/uploadify/public/system/photos/34/thumb/application_tile_horizontal.png
+[paperclip] There was an unexpected error while deleting directories: Errno::EACCES
+  [1m[35mSQL (0.3ms)[0m  DELETE FROM `uploads` WHERE (`uploads`.`id` = 34)
+  [1m[36mSQL (0.4ms)[0m  [1mDELETE FROM `users` WHERE (`users`.`id` = 3)[0m
+  [1m[35mSQL (1.5ms)[0m  COMMIT
+Redirected to http://localhost:3000/users
+Completed 302 Found in 245ms
+
+
+Started GET "/users" for 127.0.0.1 at 2010-09-18 10:47:28 -0400
+  Processing by UsersController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT `users`.* FROM `users`[0m
+Rendered users/index.html.erb within layouts/application (1.9ms)
+Completed 200 OK in 13ms (Views: 4.9ms | ActiveRecord: 0.4ms)
+
+
+Started GET "/" for 127.0.0.1 at 2010-09-18 10:56:30 -0400
+  Processing by UsersController#index as HTML
+  [1m[35mUser Load (0.4ms)[0m  SELECT `users`.* FROM `users`
+Rendered users/index.html.erb within layouts/application (2.6ms)
+Completed 200 OK in 18ms (Views: 7.1ms | ActiveRecord: 0.4ms)
+
+
+Started GET "/users/new" for 127.0.0.1 at 2010-09-18 10:56:33 -0400
+  Processing by UsersController#new as HTML
+Rendered users/_form.html.erb (4.8ms)
+Rendered users/new.html.erb within layouts/application (7.4ms)
+Completed 200 OK in 53ms (Views: 43.6ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/users" for 127.0.0.1 at 2010-09-18 10:56:37 -0400
+  Processing by UsersController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"IjfHxujyREfHIqQt28lCTyDPzzfpKQhSHIedbBoTQSg=", "user"=>{"name"=>"Amit"}, "commit"=>"Create User"}
+  [1m[36mSQL (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO `users` (`created_at`, `name`, `updated_at`) VALUES ('2010-09-18 14:56:37', 'Amit', '2010-09-18 14:56:37')
+  [1m[36mSQL (1.2ms)[0m  [1mCOMMIT[0m
+Redirected to http://localhost:3000/users/4
+Completed 302 Found in 42ms
+
+
+Started GET "/users/4" for 127.0.0.1 at 2010-09-18 10:56:37 -0400
+  Processing by UsersController#show as HTML
+  Parameters: {"id"=>"4"}
+  [1m[35mUser Load (1.1ms)[0m  SELECT `users`.* FROM `users` WHERE (`users`.`id` = 4) LIMIT 1
+  [1m[36mUpload Load (0.5ms)[0m  [1mSELECT `uploads`.* FROM `uploads` WHERE (`uploads`.user_id = 4)[0m
+Rendered collection (0.1ms)
+Rendered users/_show.html.erb (0.9ms)
+Rendered users/show.html.erb within layouts/application (12.2ms)
+Completed 200 OK in 42ms (Views: 15.1ms | ActiveRecord: 1.6ms)
